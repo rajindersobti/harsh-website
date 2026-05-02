@@ -1,0 +1,1128 @@
+/* global React, ReactDOM, motion, useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle, TweakColor */
+const { useState, useEffect, useRef } = React;
+const M = window.motion || {};
+const Motion = M.motion || {};
+
+/* ---------- helpers ---------- */
+const FadeUp = ({ children, delay = 0, as: Tag = "div", ...rest }) => {
+  if (Motion.div) {
+    const Component = Motion[Tag] || Motion.div;
+    return (
+      <Component
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+        {...rest}
+      >
+        {children}
+      </Component>
+    );
+  }
+  return <Tag {...rest}>{children}</Tag>;
+};
+
+/* ---------- NAV ---------- */
+const NAV = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "books", label: "Books" },
+  { id: "creativity", label: "Creativity" },
+  { id: "academics", label: "Academics" },
+  { id: "contact", label: "Contact" },
+];
+
+function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("home");
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(total > 0 ? window.scrollY / total : 0);
+
+      let cur = "home";
+      for (const item of NAV) {
+        const el = document.getElementById(item.id);
+        if (el && el.getBoundingClientRect().top < 140) cur = item.id;
+      }
+      setActive(cur);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
+      <div className="nav-inner">
+        <a href="#home" className="nav-mark">
+          Harsh Sobti<span className="dot"></span>
+        </a>
+        <div className="nav-links">
+          {NAV.map((n) => (
+            <a key={n.id} href={`#${n.id}`} className={`nav-link ${active === n.id ? "active" : ""}`}>{n.label}</a>
+          ))}
+        </div>
+        <a href="#" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent("openCVModal")); }} className="nav-cta">Request CV →</a>
+      </div>
+      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }}></div>
+    </nav>
+  );
+}
+
+/* ---------- HERO ---------- */
+function Hero() {
+  return (
+    <section id="home" className="hero" style={{ borderTop: "none" }}>
+      <div className="wrap">
+        <div className="hero-grid">
+          <div>
+            <FadeUp>
+              <div className="hero-meta">
+                <span>Portfolio</span><span className="dash"></span>
+                <span>Author · Musician · Athlete</span>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.05}>
+              <h1>
+                A student of <span className="accent">curiosity,</span><br />
+                rhythm, and <span className="accent">paper.</span>
+              </h1>
+            </FadeUp>
+            <FadeUp delay={0.1}>
+              <p className="hero-lead">
+                I'm Harsh — an eleventh-grader writing books, folding tessellations, drumming tabla, and earning belts. This is the long-form version of who I am, beyond the application form.
+              </p>
+            </FadeUp>
+            <FadeUp delay={0.15}>
+              <div className="hero-cta-row">
+                <a href="#about" className="btn btn-primary">Read the narrative <span className="btn-arrow">→</span></a>
+                <a href="#books" className="btn btn-ghost">View published works</a>
+              </div>
+            </FadeUp>
+          </div>
+          <FadeUp delay={0.2}>
+            <div className="hero-portrait placeholder">
+              <span className="ph-label">portrait · 4:5 · replace_me.jpg</span>
+            </div>
+          </FadeUp>
+        </div>
+
+        <FadeUp delay={0.25}>
+          <div className="glance">
+            <div className="glance-label">— A Quick Glance</div>
+            <div className="glance-grid">
+              <div className="glance-card">
+                <div className="glance-num">02<sup>books</sup></div>
+                <div className="glance-tag">Authored & published — available on Amazon.</div>
+              </div>
+              <div className="glance-card">
+                <div className="glance-num">13<sup>yrs</sup></div>
+                <div className="glance-tag">Of tabla, from first taal to advanced compositions.</div>
+              </div>
+              <div className="glance-card">
+                <div className="glance-num">07<sup>belts</sup></div>
+                <div className="glance-tag">Belts earned in karate — currently brown.</div>
+              </div>
+              <div className="glance-card">
+                <div className="glance-num">11<sup>MUNs</sup></div>
+                <div className="glance-tag">Conferences debated; six awards across committees.</div>
+              </div>
+              <div className="glance-card">
+                <div className="glance-num">02<sup>papers</sup></div>
+                <div className="glance-tag">Authored research, one under review and one in progress.</div>
+              </div>
+            </div>
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- ABOUT ---------- */
+function About() {
+  return (
+    <section id="about">
+      <div className="wrap">
+        <FadeUp>
+          <div className="section-head">
+            <div className="section-num">01 — About</div>
+            <div>
+              <span className="section-kicker">Narrative</span>
+              <h2 className="section-title">A multidimensional <em>upbringing.</em></h2>
+            </div>
+          </div>
+        </FadeUp>
+
+        <div className="about-grid">
+          <div className="section-num" style={{ borderTop: "none", paddingTop: 0, marginTop: 4 }}>INTRODUCTION</div>
+          <FadeUp>
+            <div className="about-narrative">
+              <p><span className="drop">I</span> grew up in a house where every question had room to breathe. We don't really do the dinner-table thing — we gather around ideas instead, turning them over from every angle, arguing the way other families pass the salt. My dad lives somewhere between his work and his health routine. My mom is my creative compass: she's the one who handed me my first paintbrush, and the one who sat me down at my first tabla when I was three and the instrument was honestly bigger than I was. I was the kid who asked too many questions, and somehow nobody ever told me to stop.</p>
+              <p>Books showed up at our place faster than anyone could finish them. My dad and I keep a running monthly tally of who's read more, and — sorry Dad — it hasn't been close in a while. I published my first book at twelve and the second one three years later. Music came early too, and rhythm became more than a skill for me; it's where I go when the world gets loud. Origami has been a steady companion for the last five years — quieter than the rest, but it taught me what patience actually feels like in my hands.</p>
+              <p>Fitness is non-negotiable. I started karate at seven and made it to second brown belt before Covid pressed pause on the whole thing. The black belt is still on the list. Badminton and cycling fill in the gaps.</p>
+              <p>Here's the thing I've figured out, though: none of these threads are actually separate. The patience it takes to hold a folded paper crease in place for forty-five seconds is the same patience that sits through a long taal cycle, or a longer research review. It's all the same thing, just speaking <em style={{ fontStyle: "italic", color: "var(--accent)" }}>different languages.</em></p>
+            </div>
+          </FadeUp>
+
+          <FadeUp delay={0.1}>
+            <div className="about-side">
+              <div className="trait">
+                <div className="trait-name">Patient</div>
+                <div className="trait-body">Origami taught me that a beautiful result is mostly waiting, then a single confident move.</div>
+              </div>
+              <div className="trait">
+                <div className="trait-name">Disciplined</div>
+                <div className="trait-body">Thirteen years of tabla riyaaz means showing up daily, especially when nobody is listening.</div>
+              </div>
+              <div className="trait">
+                <div className="trait-name">Curious</div>
+                <div className="trait-body">I authored a research paper because I'd rather sit with a question for months than answer it in a week.</div>
+              </div>
+              <div className="trait">
+                <div className="trait-name">Articulate</div>
+                <div className="trait-body">Eleven MUNs taught me that good arguments respect the room as much as the resolution.</div>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+
+        {/* Aspirations */}
+        <FadeUp>
+          <div className="asp-grid">
+            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>ASPIRATIONS</div>
+            <div>
+              <span className="section-kicker">— Where I'm Going</span>
+              <div className="asp-pull">
+                I want a life where <em>making, performing, and proving</em> aren't kept in separate rooms.
+              </div>
+              <div className="asp-body">
+                <p>My short-term goal is to study where a research-first mindset is encouraged — somewhere I can take a math seminar in the morning, draft a paper in the afternoon, and play something on a Friday night without one feeling like a hobby and the other a calling.</p>
+                <p>Longer term, I want to use what I learn to make work that lasts. A third book by twenty. A peer-reviewed publication before I graduate undergrad. A black belt eventually. And, somewhere in there, the kind of friendships that are built by working on hard things together.</p>
+              </div>
+            </div>
+          </div>
+        </FadeUp>
+
+        {/* Extracurriculars */}
+        <FadeUp>
+          <div className="ec-grid">
+            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>EXTRA-CURRICULARS</div>
+            <div>
+              <span className="section-kicker">— Leadership & Voice</span>
+              <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 400, marginBottom: 32, maxWidth: "20ch", lineHeight: 1.15 }}>
+                Speaking, organizing, <em style={{ color: "var(--accent)", fontStyle: "italic" }}>and showing up</em>.
+              </h3>
+              <div className="ec-cards">
+                <div className="ec-card">
+                  <div className="ec-icon">D</div>
+                  <div className="ec-title">Debate</div>
+                  <div className="ec-body">Captain of the school debate team. Inter-school finalist three times in parliamentary format; coached two junior cohorts on rebuttal craft.</div>
+                  <div className="ec-meta"><span>2023 — present</span><span>Captain</span></div>
+                </div>
+                <div className="ec-card">
+                  <div className="ec-icon">M</div>
+                  <div className="ec-title">Model UN</div>
+                  <div className="ec-body">Eleven conferences, six awards across UNHRC, DISEC, and Historical committees. Director of the school's hosted MUN in 2025.</div>
+                  <div className="ec-meta"><span>2022 — present</span><span>Director</span></div>
+                </div>
+                <div className="ec-card">
+                  <div className="ec-icon">L</div>
+                  <div className="ec-title">Leadership</div>
+                  <div className="ec-body">Student council representative; founded the school's first creative writing circle. Mentor in a peer-tutoring program for math and writing.</div>
+                  <div className="ec-meta"><span>2024 — present</span><span>Founder</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- BOOKS ---------- */
+function Books() {
+  return (
+    <section id="books" className="books-section">
+      <div className="wrap">
+        <FadeUp>
+          <div className="section-head">
+            <div className="section-num">02 — Books</div>
+            <div>
+              <span className="section-kicker">Authored Works</span>
+              <h2 className="section-title">Two volumes, <em>twice the questions.</em></h2>
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp>
+          <div className="book">
+            <div className="book-meta-num">№ 01 / 02</div>
+            <div className="book-cover book-cover-photo">
+              <img src="images/book-cover-1.jpg" alt="Land of Horrors — Jack and His Adventures in Cowland Book One" />
+            </div>
+            <div className="book-info">
+              <h3>Land of Horrors</h3>
+              <div className="subtitle">Jack and His Adventures in Cowland — Book One</div>
+              <p className="summary">
+                The opening volume of the Cowland series introduces Jack, a young protagonist swept into a world where the ordinary rules of his life no longer apply. As he navigates the Land of Horrors, he discovers that bravery is less about the absence of fear and more about what you choose to do beside it — a story written for middle-grade readers but built around the kind of questions that follow a reader long after the last page.
+              </p>
+              <div className="book-stats">
+                <div className="book-stat"><span className="lbl">Series</span><span className="val">Cowland · I</span></div>
+                <div className="book-stat"><span className="lbl">Genre</span><span className="val">Middle-grade adventure</span></div>
+                <div className="book-stat"><span className="lbl">Published</span><span className="val">2023</span></div>
+                <div className="book-stat"><span className="lbl">ISBN</span><span className="val">1639045686</span></div>
+              </div>
+              <a href="https://www.amazon.in/Land-Horrors-Book-Adventures-Cowland/dp/1639045686/" target="_blank" rel="noopener" className="amazon-cta">Buy on Amazon <span style={{ fontSize: 18 }}>→</span></a>
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp>
+          <div className="book">
+            <div className="book-meta-num">№ 02 / 02</div>
+            <div className="book-cover book-cover-photo">
+              <img src="images/book-cover-2.jpg" alt="Jack and His Adventures in Cowland — Book Two" />
+            </div>
+            <div className="book-info">
+              <h3>Jack and His Adventures in Cowland</h3>
+              <div className="subtitle">Book Two of the Cowland series</div>
+              <p className="summary">
+                The second installment picks up Jack's story with a wider world, higher stakes, and a more complicated cast. Where the first book was a fable of fear, this one is a study in friendship and consequence — what it means to keep a promise to someone whose mind you can't read, and a stranger whose motives you don't know.
+              </p>
+              <div className="book-stats">
+                <div className="book-stat"><span className="lbl">Series</span><span className="val">Cowland · II</span></div>
+                <div className="book-stat"><span className="lbl">Genre</span><span className="val">Middle-grade adventure</span></div>
+                <div className="book-stat"><span className="lbl">Published</span><span className="val">2025</span></div>
+                <div className="book-stat"><span className="lbl">Format</span><span className="val">Kindle / Paperback</span></div>
+              </div>
+              <a href="https://www.amazon.in/Jack-His-Adventures-Cowland-Book/dp/B0FHJ85C4J/" target="_blank" rel="noopener" className="amazon-cta">Buy on Amazon <span style={{ fontSize: 18 }}>→</span></a>
+            </div>
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- CREATIVITY ---------- */
+function Creativity() {
+  const [tab, setTab] = useState("origami");
+  return (
+    <section id="creativity">
+      <div className="wrap">
+        <FadeUp>
+          <div className="section-head">
+            <div className="section-num">03 — Creativity</div>
+            <div>
+              <span className="section-kicker">Three Disciplines</span>
+              <h2 className="section-title">Paper, percussion, <em>persistence.</em></h2>
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp>
+          <div className="creativity-intro">
+            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>INTRO</div>
+            <div className="creativity-pull">
+              Three practices, one <em>shared grammar:</em> repetition until precision becomes instinct.
+            </div>
+            <div className="creativity-body">
+              <p>I picked up origami the same year I started tabla, and karate two years later. They didn't feel related at the time. They do now. Each one is a way of practicing the same skill — listening to a difficult thing closely enough to make it look easy.</p>
+            </div>
+          </div>
+        </FadeUp>
+
+        <div className="disc-tabs">
+          <button onClick={() => setTab("origami")} className={`disc-tab ${tab === "origami" ? "active" : ""}`}>
+            <span className="num">A</span><span className="label">Origami</span>
+          </button>
+          <button onClick={() => setTab("tabla")} className={`disc-tab ${tab === "tabla" ? "active" : ""}`}>
+            <span className="num">B</span><span className="label">Tabla</span>
+          </button>
+          <button onClick={() => setTab("karate")} className={`disc-tab ${tab === "karate" ? "active" : ""}`}>
+            <span className="num">C</span><span className="label">Karate</span>
+          </button>
+        </div>
+
+        {tab === "origami" && <Origami />}
+        {tab === "tabla" && <Tabla />}
+        {tab === "karate" && <Karate />}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ORIGAMI TILES CONFIG
+   ─────────────────────────────────────────────────────────────────────────
+   HOW TO ADD A NEW CLUSTER
+   1. Create a folder:  images/origami/<folder-name>/
+   2. Drop photos in:   images/origami/<folder-name>/01.jpeg  02.jpeg  …
+      (any extension works: .jpg, .jpeg, .png, .webp)
+   3. Add an entry to ORIGAMI_TILES below:
+
+      {
+        cls:       "wide" | "tall" | ""   — grid cell size
+        label:     "display name · optional detail"
+        fit:       "contain"              — optional; use for tall portrait shots
+        instaLink: "https://www.instagram.com/p/POST_ID/"  — optional; links tile to a specific post
+        photos:    [ "images/origami/<folder>/<file>", … ]
+      }
+
+   cls values:
+     ""     → 1×1 square
+     "wide" → 2 columns wide
+     "tall" → 2 rows tall
+
+   Leave instaLink out (or set to "") to show no Instagram button on that tile.
+   ───────────────────────────────────────────────────────────────────────── */
+const ORIGAMI_TILES = [
+  {
+    cls: "wide",
+    label: "modular peacock · 5000+ units",
+    instaLink: "https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==",
+    photos: [
+      "images/origami/peacock/01.jpeg",
+      "images/origami/peacock/02.jpeg",
+      "images/origami/peacock/03.jpeg",
+    ],
+  },
+  {
+    cls: "",
+    label: "blakiston's fish owl · single sheet",
+    instaLink: "https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==",
+    photos: [
+      "images/origami/owl/01.jpeg",
+    ],
+  },
+  {
+    cls: "tall",
+    label: "origami eagle",
+    fit: "contain",
+    instaLink: "https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==",
+    photos: [
+      "images/origami/eagle/01.jpeg",
+      "images/origami/eagle/02.jpeg",
+      "images/origami/eagle/03.jpeg",
+    ],
+  },
+  {
+    cls: "",
+    label: "turbine tessellation",
+    instaLink: "https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==",
+    photos: [
+      "images/origami/tessellation/01.jpeg",
+      "images/origami/tessellation/02.jpeg",
+    ],
+  },
+  {
+    cls: "",
+    label: "hana bishi",
+    instaLink: "https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==",
+    photos: [
+      "images/origami/hana-bishi/01.jpeg",
+      "images/origami/hana-bishi/02.jpeg",
+    ],
+  },
+  {
+    cls: "",
+    label: "cactus kusudama",
+    instaLink: "https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==",
+    photos: [
+      "images/origami/cactus-kusudama/01.jpeg",
+      "images/origami/cactus-kusudama/02.jpeg",
+    ],
+  },
+];
+
+/* Instagram SVG icon — inline so no external dependency */
+const InstaIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+);
+
+function OrigamiCarousel({ tile }) {
+  const scrollRef = useRef(null);
+  const [idx, setIdx] = useState(0);
+  const photos = tile.photos || [];
+  const count = Math.max(photos.length, 1);
+
+  const onScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const i = Math.round(el.scrollLeft / el.clientWidth);
+    if (i !== idx) setIdx(i);
+  };
+
+  const goTo = (i) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
+
+  return (
+    <div className={`origami-tile ${tile.cls}`}>
+      <div className="corner"></div>
+      {count > 1 && (
+        <div className="origami-count">{String(idx + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}</div>
+      )}
+      {tile.instaLink && (
+        <a
+          href={tile.instaLink}
+          target="_blank"
+          rel="noopener"
+          className="origami-insta"
+          aria-label="View on Instagram"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <InstaIcon />
+        </a>
+      )}
+      <div className="origami-scroll" ref={scrollRef} onScroll={onScroll}>
+        {photos.length === 0 ? (
+          <div className="origami-frame empty"></div>
+        ) : (
+          photos.map((src, i) => (
+            <div className="origami-frame" key={i}>
+              <img
+                src={src}
+                alt={`${tile.label} — ${i + 1}`}
+                loading="lazy"
+                style={tile.fit === "contain" ? { objectFit: "contain", padding: "12px" } : undefined}
+              />
+            </div>
+          ))
+        )}
+      </div>
+      {count > 1 && (
+        <>
+          <button className="origami-nav prev" onClick={() => goTo(Math.max(0, idx - 1))} disabled={idx === 0} aria-label="Previous">‹</button>
+          <button className="origami-nav next" onClick={() => goTo(Math.min(count - 1, idx + 1))} disabled={idx === count - 1} aria-label="Next">›</button>
+          <div className="origami-dots">
+            {photos.map((_, i) => (
+              <span key={i} className={`origami-dot ${i === idx ? "active" : ""}`}></span>
+            ))}
+          </div>
+        </>
+      )}
+      <div className="label">{tile.label}</div>
+    </div>
+  );
+}
+
+function Origami() {
+  const tiles = ORIGAMI_TILES;
+  return (
+    <FadeUp>
+      <div className="origami-grid">
+        {tiles.map((t, i) => (
+          <OrigamiCarousel key={i} tile={t} />
+        ))}
+      </div>
+
+      <div className="foundations">
+        <div>
+          <div className="sub">— Foundational Principles</div>
+          <h3>The grammar behind the fold.</h3>
+          <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65 }}>
+            I work primarily within the Yoshizawa–Randlett notation, but the most interesting territory for me lies in tessellation and curved-crease surfaces — folds that behave like equations more than diagrams.
+          </p>
+          <div className="social-row">
+            <a href="https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==" target="_blank" rel="noopener" className="social-link">
+              <span style={{ width: 14, height: 14, border: "1.5px solid currentColor", borderRadius: 4, display: "inline-block" }}></span>
+              @geometricfolds
+            </a>
+            <span style={{ color: "var(--slate)" }}>— follow the practice on Instagram</span>
+          </div>
+        </div>
+        <div>
+          <div className="principle">
+            <div className="pn">PRINCIPLE 01</div>
+            <div>
+              <div className="name">Yoshizawa–Randlett system</div>
+              <div className="desc">The standard notation of valley/mountain folds, dotted axes, and reverse folds — the alphabet from which every diagram is written.</div>
+            </div>
+          </div>
+          <div className="principle">
+            <div className="pn">PRINCIPLE 02</div>
+            <div>
+              <div className="name">Tessellations & flat-foldability</div>
+              <div className="desc">Crease patterns that tile a plane and obey Maekawa's theorem (M − V = ±2 at every interior vertex). My tessellation pieces are designed before they're folded.</div>
+            </div>
+          </div>
+          <div className="principle">
+            <div className="pn">PRINCIPLE 03</div>
+            <div>
+              <div className="name">Curved creases</div>
+              <div className="desc">Folding along arcs instead of straight lines, where the paper itself becomes the form-finder — bending into ruled surfaces and developable geometries that no flat-fold sequence can produce.</div>
+            </div>
+          </div>
+          <div className="principle">
+            <div className="pn">PRINCIPLE 04</div>
+            <div>
+              <div className="name">Modular construction</div>
+              <div className="desc">Assemblies of dozens or hundreds of identical units — kusudama, sonobe, polyhedra — which behave less like art and more like combinatorial geometry.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </FadeUp>
+  );
+}
+
+function Tabla() {
+  const timeline = [
+    { yr: "2013", title: "First lesson", milestone: true },
+    { yr: "2015", title: "Teentaal mastered" },
+    { yr: "2017", title: "First public recital", milestone: true },
+    { yr: "2019", title: "Advanced compositions" },
+    { yr: "2021", title: "Visharad — part I" },
+    { yr: "2023", title: "All-India junior finalist", milestone: true },
+    { yr: "2026", title: "Visharad — part II" },
+  ];
+  const trophies = [
+    { yr: "2023", nm: "All-India Junior Tabla Competition", grade: "Finalist" },
+    { yr: "2022", nm: "State Classical Music Festival", grade: "Gold" },
+    { yr: "2021", nm: "Pracheen Kala Kendra Visharad I", grade: "Distinction" },
+    { yr: "2020", nm: "Inter-school Solo — Open category", grade: "1st place" },
+    { yr: "2018", nm: "Regional Young Artist Showcase", grade: "Honourable" },
+  ];
+  return (
+    <FadeUp>
+      <div className="tabla-hero">
+        <div>
+          <div className="tabla-years">13<sub>years</sub></div>
+        </div>
+        <div className="tabla-blurb">
+          <p>Thirteen years on the same pair of drums. The bayan and dayan have outlasted three teachers, two cities, and every other hobby I've ever started. Tabla isn't the thing I'm best at — it's the thing I'm most patient with, which is probably why I keep coming back.</p>
+        </div>
+      </div>
+
+      <div className="timeline">
+        <div className="glance-label">— Timeline of practice</div>
+        <div className="timeline-track">
+          {timeline.map((t, i) => (
+            <div key={i} className={`tl-step ${t.milestone ? "milestone" : ""}`}>
+              <div className="tl-year">{t.yr}</div>
+              <div className="tl-title">{t.title}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="trophy-case">
+        <div>
+          <div className="glance-label">— Trophy Case</div>
+          <h3 style={{ fontFamily: "var(--serif)", fontSize: 32, fontWeight: 400, marginBottom: 6 }}>Certificates & competitions</h3>
+          <p style={{ fontSize: 14.5, color: "var(--ink-soft)", marginTop: 8, maxWidth: "32ch" }}>A handful of the recognitions that have come along the way. The full list is in the application packet.</p>
+        </div>
+        <div className="trophy-list">
+          {trophies.map((t, i) => (
+            <div className="trophy" key={i}>
+              <div className="yr">{t.yr}</div>
+              <div className="nm">{t.nm}</div>
+              <div className="grade">{t.grade}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="media-frame placeholder">
+        <div className="play">
+          <div className="play-disc"></div>
+          <div className="ph-meta">video · teentaal solo · 03:42 — replace_me.mp4</div>
+        </div>
+        <div className="scrub"></div>
+      </div>
+    </FadeUp>
+  );
+}
+
+function Karate() {
+  const medals = [
+    { place: "1st", placeCls: "gold", tour: "State Open — Kumite (U-17)", yr: "2025", cat: "Sparring · 65kg" },
+    { place: "2nd", tour: "Regional Inter-Style Tournament", yr: "2024", cat: "Kata · individual" },
+    { place: "1st", placeCls: "gold", tour: "District Championship", yr: "2024", cat: "Sparring · open" },
+    { place: "3rd", tour: "All-India Schools Karate Cup", yr: "2023", cat: "Kata · team" },
+    { place: "2nd", tour: "City Belt Trials", yr: "2022", cat: "Sparring · U-15" },
+  ];
+  return (
+    <FadeUp>
+      <div className="karate-hero">
+        <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>BELT JOURNEY</div>
+        <div>
+          <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: 1.05, fontWeight: 400, marginBottom: 18 }}>
+            Eight years from <em style={{ fontStyle: "italic", color: "var(--accent)" }}>white</em> to <em style={{ fontStyle: "italic", color: "var(--accent)" }}>brown.</em>
+          </h3>
+          <p style={{ fontSize: 15.5, color: "var(--ink-soft)", lineHeight: 1.65, maxWidth: "44ch" }}>
+            What I've learned in the dojo doesn't show up in the medals — it shows up in how I lose. Karate is the practice that made me unafraid of being beginner-level at something for years before getting good.
+          </p>
+        </div>
+        <div className="belt-stack">
+          <div className="belt b-white">white</div>
+          <div className="belt b-yellow">yellow</div>
+          <div className="belt b-orange">orange</div>
+          <div className="belt b-green">green</div>
+          <div className="belt b-blue">blue</div>
+          <div className="belt b-purple">purple</div>
+          <div className="belt b-brown">brown</div>
+          <div className="belt b-black">black</div>
+        </div>
+      </div>
+
+      <div className="karate-stats">
+        <div className="kstat">
+          <div className="num">14</div>
+          <div className="lbl">— Tournament medals</div>
+        </div>
+        <div className="kstat">
+          <div className="num">08</div>
+          <div className="lbl">— Years of training</div>
+        </div>
+      </div>
+
+      <div>
+        <div className="glance-label">— Selected results</div>
+        <table className="medal-table">
+          <thead>
+            <tr><th>Place</th><th>Tournament</th><th>Year</th><th>Category</th></tr>
+          </thead>
+          <tbody>
+            {medals.map((m, i) => (
+              <tr key={i}>
+                <td className={`place ${m.placeCls || ""}`}>{m.place}</td>
+                <td className="tour">{m.tour}</td>
+                <td className="yr">{m.yr}</td>
+                <td className="cat">{m.cat}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="discipline-quote">
+        "The dojo doesn't reward winning — it rewards <em>showing up tired and bowing in anyway."</em>
+        <span className="attr">— Notebook, 2024</span>
+      </div>
+    </FadeUp>
+  );
+}
+
+/* ---------- ACADEMICS ---------- */
+function Academics() {
+  const courses = [
+    { code: "MATH 11", name: "Mathematics", focus: "Calculus, linear algebra, and proof-based problem solving." },
+    { code: "PHYS 11", name: "Physics", focus: "Mechanics, electromagnetism, and an introduction to quantum behaviour." },
+    { code: "CHEM 11", name: "Chemistry", focus: "Physical and organic chemistry, with a focus on bonding and reaction mechanisms." },
+    { code: "ECON 11", name: "Economics", focus: "Microeconomic theory, market design, and applied macro fundamentals." },
+    { code: "ENG 11", name: "English Literature", focus: "Comparative essays, narrative theory, and long-form argumentative writing." },
+  ];
+  const papers = [
+    {
+      title: "Origami Constructions as an Extension of Classical Euclidean Geometry",
+      meta: ["Sole author", "Under Review", "Geometry · Computational Mathematics"],
+      live: true,
+      abstract: "This paper investigates how the axioms of paper-folding (the Huzita–Hatori system) extend the constructive power of classical compass-and-straightedge geometry. By formalising the operations of a single fold as algebraic constructions, we show how origami can solve cubic equations — including the angle trisection and the Delian problem — that are provably impossible under Euclid's axioms, positioning paper as a legitimate computational instrument rather than a craft tool.",
+      coauth: ["Harsh Sobti"],
+    },
+    {
+      title: "Is the wave–particle duality of electrons the single most important quantum principle underpinning modern semiconductor technology?",
+      meta: ["Sole author", "Under Research", "Quantum Physics"],
+      live: false,
+      abstract: "An ongoing investigation into how electron wave–particle duality — manifested through tunneling, band structure, and de Broglie behaviour — sits at the foundation of every modern semiconductor device. The paper situates duality alongside other contenders (Pauli exclusion, quantisation of energy) and argues, through case studies of MOSFETs, tunnel diodes, and emerging 2D-material transistors, why duality remains the load-bearing principle of the field.",
+      coauth: ["Harsh Sobti"],
+    },
+  ];
+  return (
+    <section id="academics">
+      <div className="wrap">
+        <FadeUp>
+          <div className="section-head">
+            <div className="section-num">04 — Academics</div>
+            <div>
+              <span className="section-kicker">Curriculum & Research</span>
+              <h2 className="section-title">The classroom <em>and what it spills into.</em></h2>
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp>
+          <div className="acad-grid">
+            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>CURRICULUM</div>
+            <div>
+              <span className="section-kicker">— 11th Standard</span>
+              <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 400, marginBottom: 24, maxWidth: "20ch", lineHeight: 1.15 }}>
+                Sciences with a literary <em style={{ fontStyle: "italic", color: "var(--accent)" }}>shadow.</em>
+              </h3>
+              <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65, maxWidth: "44ch" }}>
+                I lean toward STEM, but I refuse to give up the humanities. My current focus is the overlap — the math of music, the geometry of paper, the rhetoric of science.
+              </p>
+            </div>
+            <div className="curriculum">
+              {courses.map((c, i) => (
+                <div className="course" key={i}>
+                  <div className="code">{c.code}</div>
+                  <div className="name">{c.name}</div>
+                  <div className="focus">{c.focus}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp>
+          <div className="research-grid">
+            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>RESEARCH</div>
+            <div>
+              <span className="section-kicker">— Publications & Co-authorship</span>
+              <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 400, marginBottom: 24, maxWidth: "22ch", lineHeight: 1.15 }}>
+                Two papers, <em style={{ fontStyle: "italic", color: "var(--accent)" }}>one ongoing line of inquiry.</em>
+              </h3>
+              {papers.map((p, i) => (
+                <div className="paper" key={i}>
+                  <div className="pn">№ 0{i + 1}</div>
+                  <div>
+                    <h4 className="paper-title">{p.title}</h4>
+                    <div className="paper-meta">
+                      {p.meta.map((m, j) => (
+                        <span key={j} className={`tag ${p.live && j === 1 ? "live" : ""}`}>{m}</span>
+                      ))}
+                    </div>
+                    <p className="paper-abstract">{p.abstract}</p>
+                    <div className="paper-coauth">
+                      Authors:&nbsp;
+                      {p.coauth.map((a, j) => (
+                        <span key={j}>{a === "Harsh" ? <strong>Harsh</strong> : a}{j < p.coauth.length - 1 ? " · " : ""}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp>
+          <div className="future">
+            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>FUTURE PATH</div>
+            <div>
+              <span className="section-kicker">— Where Next</span>
+              <div className="future-headline">
+                Toward an undergraduate program that doesn't ask me to <em>choose between rooms.</em>
+              </div>
+              <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: 1.7, maxWidth: "62ch" }}>
+                I'm applying to schools strong in computational and applied mathematics, physics, and economics — with serious humanities programs and active student arts cultures. The goal is to keep the three rooms — research, performance, sport — connected to one corridor.
+              </p>
+              <div className="future-cols">
+                <div className="future-col">
+                  <h4>Intended Majors</h4>
+                  <ul>
+                    <li>Mathematics</li>
+                    <li>Physics</li>
+                    <li>Economics</li>
+                  </ul>
+                </div>
+                <div className="future-col">
+                  <h4>Research Interests</h4>
+                  <ul>
+                    <li>Computational geometry & origami math</li>
+                    <li>Music cognition & rhythm perception</li>
+                    <li>Pedagogy of long-form practice</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- FOOTER / CONTACT ---------- */
+function Footer() {
+  return (
+    <footer id="contact" className="footer">
+      <div className="wrap">
+        <div className="footer-grid">
+          <div>
+            <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "oklch(0.65 0.01 255)", marginBottom: 24 }}>
+              — Get in touch
+            </div>
+            <h2>For admissions <em>officers, mentors,</em> and curious readers.</h2>
+            <p className="footer-lead">
+              I'd be happy to share the application packet, references, full publication list, or a longer conversation. The fastest reply is by email.
+            </p>
+          </div>
+          <div className="footer-col">
+            <h5>Direct</h5>
+            <ul>
+              <li><a href="mailto:harshsobti2009@gmail.com">harshsobti2009@gmail.com</a></li>
+              <li><a href="#">+91 · on request</a></li>
+              <li><a href="#" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent("openCVModal")); }}>Download CV (PDF)</a></li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h5>Elsewhere</h5>
+            <ul>
+              <li><a href="https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==" target="_blank" rel="noopener">Instagram — @geometricfolds</a></li>
+              <li><a href="https://www.linkedin.com/in/harsh-sobti-6a1095318?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener">LinkedIn — Harsh Sobti</a></li>
+              <li><a href="https://www.amazon.in/Land-Horrors-Book-Adventures-Cowland/dp/1639045686/" target="_blank" rel="noopener">Amazon — author page</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© Harsh Sobti</span>
+          <span>Designed & written, May 2026</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ---------- CV REQUEST MODAL ---------- */
+function CVModal({ open, onClose }) {
+  const [form, setForm] = useState({ name: "", institution: "", email: "", phone: "", reason: "" });
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setSubmitted(false);
+      setErrors({});
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape" && open) onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const update = (k, v) => {
+    setForm((f) => ({ ...f, [k]: v }));
+    if (errors[k]) setErrors((e) => ({ ...e, [k]: null }));
+  };
+
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = "Required";
+    if (!form.institution.trim()) e.institution = "Required";
+    if (!form.email.trim()) e.email = "Required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) e.email = "Please enter a valid email address";
+    if (!form.phone.trim()) e.phone = "Required";
+    else if (!/^[+\d][\d\s\-()]{6,}$/.test(form.phone.trim())) e.phone = "Please enter a valid phone number";
+    if (!form.reason.trim()) e.reason = "Required";
+    else if (form.reason.trim().length < 10) e.reason = "A little more context, please";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    if (!validate()) return;
+    try {
+      const log = JSON.parse(localStorage.getItem("cvRequests") || "[]");
+      log.push({ ...form, at: new Date().toISOString() });
+      localStorage.setItem("cvRequests", JSON.stringify(log));
+    } catch (_) {}
+    setSubmitted(true);
+  };
+
+  const triggerDownload = () => {
+    const blob = new Blob(
+      [`Harsh Sobti — Curriculum Vitae\n\nRequested by: ${form.name} (${form.institution})\nEmail: ${form.email}\n\n[Replace this placeholder with the real CV PDF.]`],
+      { type: "application/pdf" }
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Harsh-Sobti-CV.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    onClose();
+  };
+
+  return (
+    <div className="cv-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="cv-card" role="dialog" aria-modal="true" aria-labelledby="cv-title">
+        <button className="cv-close" onClick={onClose} aria-label="Close">×</button>
+
+        {!submitted ? (
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="cv-kicker">— Request CV</div>
+            <h3 id="cv-title" className="cv-title">A few details before I share my CV.</h3>
+            <p className="cv-sub">I keep a brief log of who's read it — partly courtesy, partly so I can follow up if it's relevant. Nothing here goes anywhere else.</p>
+
+            <div className="cv-field">
+              <label className="cv-label" htmlFor="cv-name">Full Name</label>
+              <input id="cv-name" className={`cv-input ${errors.name ? "error" : ""}`} type="text" value={form.name} onChange={(e) => update("name", e.target.value)} autoFocus />
+              {errors.name && <div className="cv-error-msg">{errors.name}</div>}
+            </div>
+
+            <div className="cv-field">
+              <label className="cv-label" htmlFor="cv-inst">University or Company</label>
+              <input id="cv-inst" className={`cv-input ${errors.institution ? "error" : ""}`} type="text" value={form.institution} onChange={(e) => update("institution", e.target.value)} />
+              {errors.institution && <div className="cv-error-msg">{errors.institution}</div>}
+            </div>
+
+            <div className="cv-field">
+              <label className="cv-label" htmlFor="cv-email">Email Address</label>
+              <input id="cv-email" className={`cv-input ${errors.email ? "error" : ""}`} type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
+              {errors.email && <div className="cv-error-msg">{errors.email}</div>}
+            </div>
+
+            <div className="cv-field">
+              <label className="cv-label" htmlFor="cv-phone">Phone Number</label>
+              <input id="cv-phone" className={`cv-input ${errors.phone ? "error" : ""}`} type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+              {errors.phone && <div className="cv-error-msg">{errors.phone}</div>}
+            </div>
+
+            <div className="cv-field">
+              <label className="cv-label" htmlFor="cv-reason">Reason for Download</label>
+              <textarea id="cv-reason" className={`cv-textarea ${errors.reason ? "error" : ""}`} rows="3" value={form.reason} onChange={(e) => update("reason", e.target.value)} placeholder="Admissions review, mentorship, collaboration, …" />
+              {errors.reason && <div className="cv-error-msg">{errors.reason}</div>}
+            </div>
+
+            <div className="cv-actions">
+              <button type="button" className="cv-btn cv-btn-ghost" onClick={onClose}>Cancel</button>
+              <button type="submit" className="cv-btn cv-btn-primary">Submit & continue →</button>
+            </div>
+          </form>
+        ) : (
+          <div className="cv-success">
+            <div className="check">✓</div>
+            <div className="cv-kicker">— Thank you</div>
+            <h3 className="cv-title">Your CV is ready, {form.name.split(" ")[0]}.</h3>
+            <p className="cv-sub">I appreciate you sharing your details. The CV will download as a PDF — feel free to reach me at harshsobti2009@gmail.com with any follow-ups.</p>
+            <div className="cv-actions">
+              <button type="button" className="cv-btn cv-btn-ghost" onClick={onClose}>Close</button>
+              <button type="button" className="cv-btn cv-btn-primary" onClick={triggerDownload}>Download CV ↓</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- TWEAKS ---------- */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": "navy",
+  "serifChoice": "cormorant",
+  "density": "comfortable",
+  "showAccent": true,
+  "accentColor": "#c66a3c"
+}/*EDITMODE-END*/;
+
+function applyTweaks(t) {
+  const root = document.documentElement.style;
+  const palettes = {
+    navy:    { ink: "oklch(0.22 0.01 255)", paper: "oklch(0.975 0.008 85)", navy: "oklch(0.28 0.06 255)", deep: "oklch(0.22 0.07 258)" },
+    forest:  { ink: "oklch(0.22 0.02 160)", paper: "oklch(0.97 0.01 110)", navy: "oklch(0.32 0.06 160)", deep: "oklch(0.22 0.06 158)" },
+    bordeaux:{ ink: "oklch(0.22 0.02 20)",  paper: "oklch(0.97 0.012 60)", navy: "oklch(0.32 0.08 20)", deep: "oklch(0.22 0.08 18)" },
+    graphite:{ ink: "oklch(0.18 0 0)",      paper: "oklch(0.96 0 0)",      navy: "oklch(0.28 0.005 250)", deep: "oklch(0.18 0.005 250)" },
+  };
+  const p = palettes[t.palette] || palettes.navy;
+  root.setProperty("--ink", p.ink);
+  root.setProperty("--paper", p.paper);
+  root.setProperty("--navy", p.navy);
+  root.setProperty("--navy-deep", p.deep);
+
+  const fonts = {
+    cormorant: '"Cormorant Garamond", Georgia, serif',
+    playfair: '"Playfair Display", Georgia, serif',
+    fraunces: '"Fraunces", Georgia, serif',
+    spectral: '"Spectral", Georgia, serif',
+  };
+  root.setProperty("--serif", fonts[t.serifChoice] || fonts.cormorant);
+
+  if (t.showAccent && t.accentColor) {
+    root.setProperty("--accent", t.accentColor);
+  } else if (!t.showAccent) {
+    root.setProperty("--accent", "var(--ink)");
+  }
+
+  document.body.style.fontSize = t.density === "compact" ? "15px" : t.density === "spacious" ? "17px" : "16px";
+}
+
+function App() {
+  const tweaks = useTweaks ? useTweaks(TWEAK_DEFAULTS) : null;
+  const t = tweaks ? tweaks[0] : TWEAK_DEFAULTS;
+  const setTweak = tweaks ? tweaks[1] : () => {};
+  const [cvOpen, setCvOpen] = useState(false);
+
+  useEffect(() => { applyTweaks(t); }, [t]);
+
+  useEffect(() => {
+    const open = () => setCvOpen(true);
+    window.addEventListener("openCVModal", open);
+    return () => window.removeEventListener("openCVModal", open);
+  }, []);
+
+  return (
+    <>
+      <Nav />
+      <Hero />
+      <About />
+      <Books />
+      <Creativity />
+      <Academics />
+      <Footer />
+
+      <CVModal open={cvOpen} onClose={() => setCvOpen(false)} />
+
+      {TweaksPanel && (
+        <TweaksPanel title="Tweaks">
+          <TweakSection title="Palette">
+            <TweakRadio label="Tone" value={t.palette} onChange={(v) => setTweak("palette", v)}
+              options={[
+                { value: "navy", label: "Navy" },
+                { value: "forest", label: "Forest" },
+                { value: "bordeaux", label: "Bordeaux" },
+                { value: "graphite", label: "Graphite" },
+              ]} />
+            <TweakToggle label="Accent color" value={t.showAccent} onChange={(v) => setTweak("showAccent", v)} />
+            {t.showAccent && (
+              <TweakColor label="Accent" value={t.accentColor} onChange={(v) => setTweak("accentColor", v)} />
+            )}
+          </TweakSection>
+          <TweakSection title="Typography">
+            <TweakRadio label="Serif" value={t.serifChoice} onChange={(v) => setTweak("serifChoice", v)}
+              options={[
+                { value: "cormorant", label: "Cormorant" },
+                { value: "playfair", label: "Playfair" },
+                { value: "fraunces", label: "Fraunces" },
+                { value: "spectral", label: "Spectral" },
+              ]} />
+            <TweakRadio label="Density" value={t.density} onChange={(v) => setTweak("density", v)}
+              options={[
+                { value: "compact", label: "Compact" },
+                { value: "comfortable", label: "Comfortable" },
+                { value: "spacious", label: "Spacious" },
+              ]} />
+          </TweakSection>
+        </TweaksPanel>
+      )}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
