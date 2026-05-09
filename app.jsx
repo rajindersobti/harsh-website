@@ -28,6 +28,7 @@ const NAV = [
   { id: "about", label: "About" },
   { id: "books", label: "Books" },
   { id: "creativity", label: "Creativity" },
+  { id: "compound", label: "Growth" },
   { id: "academics", label: "Academics" },
   { id: "contact", label: "Contact" },
 ];
@@ -73,6 +74,166 @@ function Nav() {
   );
 }
 
+/* ---------- FEATURE 1: GLANCE CARD FLIP ---------- */
+function GlanceCard({ num, sup, tag, detail }) {
+  const [flipped, setFlipped] = React.useState(false);
+  return (
+    <div
+      className={`glance-card gc-flip-wrapper ${flipped ? "flipped" : ""}`}
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+      onClick={() => setFlipped(f => !f)}
+    >
+      <div className="gc-front">
+        <div className="glance-num">{num}<sup>{sup}</sup></div>
+        <div className="glance-tag">{tag}</div>
+      </div>
+      <div className="gc-back">{detail}</div>
+    </div>
+  );
+}
+
+/* ---------- FEATURE 3: GROWTH TIMELINE ---------- */
+const TIMELINE_DATA = [
+  {
+    discipline: "Tabla",
+    color: "var(--accent)",
+    icon: "♩",
+    startAge: 3,
+    events: [
+      { age: 3,  note: "First lesson — instrument bigger than I was." },
+      { age: 7,  note: "First taal mastered." },
+      { age: 11, note: "First public recital." },
+      { age: 15, note: "Visharad Part I — Distinction." },
+      { age: 17, note: "All-India Junior finalist. Visharad II next." },
+    ],
+  },
+  {
+    discipline: "Books",
+    color: "var(--navy)",
+    icon: "✦",
+    startAge: 10,
+    events: [
+      { age: 10, note: "First real draft — written in a notebook." },
+      { age: 12, note: "Land of Horrors published on Amazon." },
+      { age: 15, note: "Second book: three years more deliberate." },
+      { age: 17, note: "Book III in progress — ~8,000 words." },
+    ],
+  },
+  {
+    discipline: "Origami",
+    color: "#7c6a52",
+    icon: "◆",
+    startAge: 12,
+    events: [
+      { age: 12, note: "Basic cranes and modular forms." },
+      { age: 14, note: "Tessellations — designing before folding." },
+      { age: 16, note: "Curved creases and modular peacock (5000+ units)." },
+      { age: 17, note: "Instagram: @geometricfolds." },
+    ],
+  },
+  {
+    discipline: "Karate",
+    color: "#5a6478",
+    icon: "◎",
+    startAge: 7,
+    events: [
+      { age: 7,  note: "White belt. Started the long game." },
+      { age: 11, note: "Green belt — first grading I nearly failed." },
+      { age: 14, note: "Blue–Purple. District gold medal." },
+      { age: 17, note: "Brown belt. Covid pause behind me. Black belt ahead." },
+    ],
+  },
+  {
+    discipline: "Research",
+    color: "#3d6b5e",
+    icon: "∴",
+    startAge: 15,
+    events: [
+      { age: 15, note: "First research paper begun — zero experience." },
+      { age: 16, note: "Paper I complete. 47 review comments. Rewrote." },
+      { age: 17, note: "Under peer review. Second paper in progress." },
+    ],
+  },
+];
+
+function getActiveNote(discipline, age) {
+  const events = discipline.events.filter(e => e.age <= age);
+  if (events.length === 0) return null;
+  return events[events.length - 1].note;
+}
+
+function GrowthTimeline() {
+  const [scrubAge, setScrubAge] = React.useState(17);
+  const trackRef = React.useRef(null);
+  const dragging = React.useRef(false);
+  const minAge = 3, maxAge = 17;
+
+  const ageFromEvent = (clientX) => {
+    const rect = trackRef.current.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return Math.round(minAge + pct * (maxAge - minAge));
+  };
+
+  const onMouseDown  = (e) => { dragging.current = true;  setScrubAge(ageFromEvent(e.clientX)); };
+  const onMouseMove  = (e) => { if (dragging.current) setScrubAge(ageFromEvent(e.clientX)); };
+  const onMouseUp    = ()  => { dragging.current = false; };
+  const onTouchStart = (e) => { dragging.current = true;  setScrubAge(ageFromEvent(e.touches[0].clientX)); };
+  const onTouchMove  = (e) => { if (dragging.current) setScrubAge(ageFromEvent(e.touches[0].clientX)); };
+  const onTouchEnd   = ()  => { dragging.current = false; };
+
+  React.useEffect(() => {
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup",   onMouseUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend",  onTouchEnd);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup",   onMouseUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend",  onTouchEnd);
+    };
+  }, []);
+
+  const handlePct = ((scrubAge - minAge) / (maxAge - minAge)) * 100;
+  const activeDisciplines = TIMELINE_DATA.filter(d => scrubAge >= d.startAge);
+
+  return (
+    <FadeUp delay={0.3}>
+      <div className="gtl-wrap">
+        <div className="gtl-header">
+          <div className="gtl-label">— Drag to explore the timeline</div>
+          <div className="gtl-age-display">Age <span className="gtl-age-num">{scrubAge}</span></div>
+        </div>
+        <div className="gtl-track" ref={trackRef} onMouseDown={onMouseDown} onTouchStart={onTouchStart}>
+          <div className="gtl-track-fill" style={{ width: `${handlePct}%` }} />
+          {[5,7,9,11,13,15,17].map(age => (
+            <div key={age} className="gtl-age-mark" style={{ left: `${((age-minAge)/(maxAge-minAge))*100}%` }}>
+              <span>{age}</span>
+            </div>
+          ))}
+          <div className="gtl-handle" style={{ left: `${handlePct}%` }} />
+        </div>
+        <div className="gtl-panel">
+          {activeDisciplines.length === 0
+            ? <div className="gtl-empty">Drag right to explore.</div>
+            : activeDisciplines.map((d, i) => {
+                const note = getActiveNote(d, scrubAge);
+                return note ? (
+                  <div key={i} className="gtl-item">
+                    <span className="gtl-icon" style={{ color: d.color }}>{d.icon}</span>
+                    <span className="gtl-disc"  style={{ color: d.color }}>{d.discipline}</span>
+                    <span className="gtl-note">{note}</span>
+                  </div>
+                ) : null;
+              })
+          }
+        </div>
+      </div>
+    </FadeUp>
+  );
+}
+
 /* ---------- HERO ---------- */
 function Hero() {
   return (
@@ -113,31 +274,111 @@ function Hero() {
 
         <FadeUp delay={0.25}>
           <div className="glance">
-            <div className="glance-label">— A Quick Glance</div>
+            <div className="glance-label">— A Quick Glance <span className="glance-hint">hover to explore</span></div>
             <div className="glance-grid">
-              <div className="glance-card">
-                <div className="glance-num">02<sup>books</sup></div>
-                <div className="glance-tag">Authored & published — available on Amazon.</div>
-              </div>
-              <div className="glance-card">
-                <div className="glance-num">13<sup>yrs</sup></div>
-                <div className="glance-tag">Of tabla, from first taal to advanced compositions.</div>
-              </div>
-              <div className="glance-card">
-                <div className="glance-num">07<sup>belts</sup></div>
-                <div className="glance-tag">Belts earned in karate — currently brown.</div>
-              </div>
-              <div className="glance-card">
-                <div className="glance-num">11<sup>MUNs</sup></div>
-                <div className="glance-tag">Conferences debated; six awards across committees.</div>
-              </div>
-              <div className="glance-card">
-                <div className="glance-num">02<sup>papers</sup></div>
-                <div className="glance-tag">Authored research, one under review and one in progress.</div>
-              </div>
+              <GlanceCard num="02" sup="books" tag="Authored & published — available on Amazon."
+                detail={
+                  <div className="gc-track-wrap">
+                    <div className="gc-track-label">Publication arc</div>
+                    <div className="gc-dot-track">
+                      <div className="gc-dot-row">
+                        <span className="gc-dot filled" style={{left:"0%"}}/>
+                        <span className="gc-dot filled" style={{left:"50%"}}/>
+                        <span className="gc-dot open"   style={{left:"85%"}}/>
+                        <div className="gc-track-line"/>
+                      </div>
+                      <div className="gc-dot-labels">
+                        <span style={{left:"0%"}}>Age 12</span>
+                        <span style={{left:"50%"}}>Age 15</span>
+                        <span style={{left:"85%"}}>Age 17</span>
+                      </div>
+                    </div>
+                    <div className="gc-track-note">Gap shrinking. Acceleration real.</div>
+                  </div>
+                }
+              />
+              <GlanceCard num="13" sup="yrs" tag="Of tabla, from first taal to advanced compositions."
+                detail={
+                  <div className="gc-track-wrap">
+                    <div className="gc-track-label">13-year arc</div>
+                    <div className="gc-dot-track">
+                      <div className="gc-dot-row">
+                        {[["0%","2013"],["28%","2017"],["55%","2021"],["78%","2023"],["100%","2026"]].map(([pos,yr],i) => (
+                          <span key={i} className={`gc-dot ${i < 4 ? "filled" : "open"}`} style={{left:pos}}>
+                            <span className="gc-yr">{yr}</span>
+                          </span>
+                        ))}
+                        <div className="gc-track-line"/>
+                      </div>
+                    </div>
+                    <div className="gc-track-note">Visharad II — 2026 target.</div>
+                  </div>
+                }
+              />
+              <GlanceCard num="07" sup="belts" tag="Belts earned in karate — currently brown."
+                detail={
+                  <div className="gc-track-wrap">
+                    <div className="gc-track-label">White → Brown → Black</div>
+                    <div className="gc-belt-row">
+                      {[
+                        {c:"#f5f5f0",label:"W",done:true},{c:"#f5c518",label:"Y",done:true},
+                        {c:"#f97316",label:"O",done:true},{c:"#22c55e",label:"G",done:true},
+                        {c:"#3b82f6",label:"B",done:true},{c:"#a855f7",label:"P",done:true},
+                        {c:"#92400e",label:"Br",done:true},{c:"#1a1a1a",label:"Bk",done:false},
+                      ].map((b,i) => (
+                        <div key={i} className={`gc-belt-pip ${b.done ? "" : "gc-belt-goal"}`}
+                          style={{background: b.done ? b.c : "transparent",
+                                  border: b.done ? (b.c === "#f5f5f0" ? "1px solid #ccc" : "none") : "1.5px dashed var(--slate)",
+                                  color: b.done ? (b.c === "#f5f5f0" ? "#333" : "#fff") : "var(--slate)"}}>
+                          {b.label}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="gc-track-note">One exam from black.</div>
+                  </div>
+                }
+              />
+              <GlanceCard num="11" sup="MUNs" tag="Conferences debated; six awards across committees."
+                detail={
+                  <div className="gc-track-wrap">
+                    <div className="gc-track-label">Role progression</div>
+                    <div className="gc-role-track">
+                      <div className="gc-role">Delegate<span className="gc-role-yr">2022</span></div>
+                      <div className="gc-role-arrow">→</div>
+                      <div className="gc-role">Award winner<span className="gc-role-yr">2022–24</span></div>
+                      <div className="gc-role-arrow">→</div>
+                      <div className="gc-role gc-role-current">Director<span className="gc-role-yr">2025</span></div>
+                    </div>
+                    <div className="gc-track-note">6 awards — UNHRC, DISEC, Historical.</div>
+                  </div>
+                }
+              />
+              <GlanceCard num="02" sup="papers" tag="Authored research, one under review and one in progress."
+                detail={
+                  <div className="gc-track-wrap">
+                    <div className="gc-track-label">Research timeline</div>
+                    <div className="gc-dot-track">
+                      <div className="gc-dot-row">
+                        <span className="gc-dot filled" style={{left:"0%"}}/>
+                        <span className="gc-dot filled" style={{left:"45%"}}/>
+                        <span className="gc-dot open"   style={{left:"80%"}}/>
+                        <div className="gc-track-line"/>
+                      </div>
+                      <div className="gc-dot-labels">
+                        <span style={{left:"0%"}}>Zero exp.</span>
+                        <span style={{left:"45%"}}>Paper 1</span>
+                        <span style={{left:"80%"}}>Published</span>
+                      </div>
+                    </div>
+                    <div className="gc-track-note">18 months from start to under review.</div>
+                  </div>
+                }
+              />
             </div>
           </div>
         </FadeUp>
+
+        <GrowthTimeline />
       </div>
     </section>
   );
@@ -889,6 +1130,135 @@ function Footer() {
   );
 }
 
+/* ---------- FEATURE 2: PARALLEL PROGRESS ---------- */
+function ParallelProgress() {
+  const tracks = [
+    {
+      discipline: "Tabla", startAge: 3, currentAge: 17, color: "var(--accent)",
+      milestones: [
+        { age: 3,  label: "First lesson" }, { age: 7,  label: "First taal" },
+        { age: 11, label: "Public recital" }, { age: 15, label: "Visharad I" },
+        { age: 17, label: "All-India finalist" },
+      ],
+      goal: { label: "Visharad II", age: 20 },
+    },
+    {
+      discipline: "Karate", startAge: 7, currentAge: 17, color: "#5a6478",
+      milestones: [
+        { age: 7,  label: "White" }, { age: 9,  label: "Yellow" },
+        { age: 11, label: "Orange–Green" }, { age: 13, label: "Blue–Purple" },
+        { age: 17, label: "Brown" },
+      ],
+      goal: { label: "Black belt", age: 19 },
+    },
+    {
+      discipline: "Books", startAge: 10, currentAge: 17, color: "var(--navy)",
+      milestones: [
+        { age: 10, label: "First draft" }, { age: 12, label: "Book I" },
+        { age: 15, label: "Book II" }, { age: 17, label: "Book III — writing" },
+      ],
+      goal: { label: "Book III out", age: 20 },
+    },
+    {
+      discipline: "Research", startAge: 15, currentAge: 17, color: "#7c6a52",
+      milestones: [
+        { age: 15, label: "Paper begun" }, { age: 16, label: "Paper I done" },
+        { age: 17, label: "Under review" },
+      ],
+      goal: { label: "Peer-reviewed pub", age: 18 },
+    },
+    {
+      discipline: "MUN / Debate", startAge: 14, currentAge: 17, color: "#3d6b5e",
+      milestones: [
+        { age: 14, label: "First conf." }, { age: 15, label: "First award" },
+        { age: 16, label: "Captain" }, { age: 17, label: "MUN Director" },
+      ],
+      goal: { label: "National finalist", age: 18 },
+    },
+  ];
+
+  const minAge = 3, maxAge = 20, span = maxAge - minAge;
+  const toPercent = (age) => ((age - minAge) / span) * 100;
+
+  return (
+    <section id="compound">
+      <div className="wrap">
+        <FadeUp>
+          <div className="section-head">
+            <div className="section-num">03.5 — The Compound</div>
+            <div>
+              <span className="section-kicker">All Disciplines · Same Timeline</span>
+              <h2 className="section-title">Five practices, <em>one pattern.</em></h2>
+            </div>
+          </div>
+        </FadeUp>
+
+        <FadeUp delay={0.05}>
+          <p className="compound-intro">
+            Each row is a different discipline at the same timeline resolution — age 3 to 20.
+            The open circle is where each track is going. The pattern they share: enter at zero,
+            develop slowly, then something shifts.
+          </p>
+        </FadeUp>
+
+        <FadeUp delay={0.1}>
+          <div className="pp-age-ruler">
+            {[5,7,9,11,13,15,17,19].map(age => (
+              <div key={age} className="pp-ruler-mark" style={{left:`${toPercent(age)}%`}}>
+                <span>{age}</span>
+              </div>
+            ))}
+            <div className="pp-ruler-now" style={{left:`${toPercent(17)}%`}}>
+              <span>now</span>
+            </div>
+          </div>
+        </FadeUp>
+
+        <div className="pp-tracks">
+          {tracks.map((track, ti) => (
+            <FadeUp key={ti} delay={0.05 * ti}>
+              <div className="pp-row">
+                <div className="pp-label">
+                  <span className="pp-discipline">{track.discipline}</span>
+                </div>
+                <div className="pp-track-area">
+                  <div className="pp-now-line" style={{left:`${toPercent(17)}%`}} />
+                  <div className="pp-line-active" style={{
+                    left:`${toPercent(track.startAge)}%`,
+                    width:`${toPercent(track.currentAge) - toPercent(track.startAge)}%`,
+                    background: track.color,
+                  }}/>
+                  <div className="pp-line-goal" style={{
+                    left:`${toPercent(track.currentAge)}%`,
+                    width:`${toPercent(track.goal.age) - toPercent(track.currentAge)}%`,
+                  }}/>
+                  {track.milestones.map((m, mi) => (
+                    <div key={mi} className="pp-milestone" style={{left:`${toPercent(m.age)}%`}}>
+                      <div className="pp-dot" style={{background: track.color}} />
+                      <div className="pp-milestone-label">{m.label}</div>
+                    </div>
+                  ))}
+                  <div className="pp-milestone pp-goal-dot" style={{left:`${toPercent(track.goal.age)}%`}}>
+                    <div className="pp-dot-open" style={{borderColor: track.color}} />
+                    <div className="pp-milestone-label pp-goal-label">{track.goal.label}</div>
+                  </div>
+                </div>
+              </div>
+            </FadeUp>
+          ))}
+        </div>
+
+        <FadeUp delay={0.3}>
+          <div className="compound-pull">
+            "None of these threads are actually separate — they're all the same thing,
+            just speaking <em>different languages.</em>"
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- CV REQUEST MODAL ---------- */
 function CVModal({ open, onClose }) {
   const [form, setForm] = useState({ name: "", institution: "", email: "", phone: "", reason: "" });
@@ -1084,6 +1454,7 @@ function App() {
       <About />
       <Books />
       <Creativity />
+      <ParallelProgress />
       <Academics />
       <Footer />
 
