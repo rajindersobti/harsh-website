@@ -110,7 +110,7 @@ const TIMELINE_DATA = [
   },
   {
     discipline: "Books",
-    color: "var(--navy)",
+    color: "var(--accent)",
     icon: "✦",
     startAge: 10,
     events: [
@@ -122,7 +122,7 @@ const TIMELINE_DATA = [
   },
   {
     discipline: "Origami",
-    color: "#7c6a52",
+    color: "var(--accent)",
     icon: "◆",
     startAge: 12,
     events: [
@@ -134,7 +134,7 @@ const TIMELINE_DATA = [
   },
   {
     discipline: "Karate",
-    color: "#5a6478",
+    color: "var(--accent)",
     icon: "◎",
     startAge: 7,
     events: [
@@ -146,7 +146,7 @@ const TIMELINE_DATA = [
   },
   {
     discipline: "Research",
-    color: "#3d6b5e",
+    color: "var(--accent)",
     icon: "∴",
     startAge: 15,
     events: [
