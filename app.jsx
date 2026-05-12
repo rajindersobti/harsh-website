@@ -315,26 +315,29 @@ function Hero() {
                   </div>
                 }
               />
-              <GlanceCard num="07" sup="belts" tag="Belts earned in karate — currently brown."
+              <GlanceCard num="08" sup="belts" tag="Belts earned in karate — currently brown/white stripe."
                 detail={
                   <div className="gc-track-wrap">
-                    <div className="gc-track-label">White → Brown → Black</div>
+                    <div className="gc-track-label">White → Brown/White → Black</div>
                     <div className="gc-belt-row">
                       {[
-                        {c:"#f5f5f0",label:"W",done:true},{c:"#f5c518",label:"Y",done:true},
-                        {c:"#f97316",label:"O",done:true},{c:"#22c55e",label:"G",done:true},
-                        {c:"#3b82f6",label:"B",done:true},{c:"#a855f7",label:"P",done:true},
-                        {c:"#92400e",label:"Br",done:true},{c:"#1a1a1a",label:"Bk",done:false},
+                        {c:"#f5f5f0",border:"1px solid #ccc",done:true},
+                        {c:"#f5c518",done:true},
+                        {c:"#f97316",done:true},
+                        {c:"#22c55e",done:true},
+                        {c:"#3b82f6",done:true},
+                        {c:"#a855f7",done:true},
+                        {c:"#92400e",done:true},
+                        {c:"linear-gradient(135deg,#92400e 50%,#f5f5f0 50%)",done:true},
+                        {c:"transparent",done:false},
                       ].map((b,i) => (
                         <div key={i} className={`gc-belt-pip ${b.done ? "" : "gc-belt-goal"}`}
                           style={{background: b.done ? b.c : "transparent",
-                                  border: b.done ? (b.c === "#f5f5f0" ? "1px solid #ccc" : "none") : "1.5px dashed var(--slate)",
-                                  color: b.done ? (b.c === "#f5f5f0" ? "#333" : "#fff") : "var(--slate)"}}>
-                          {b.label}
+                                  border: b.done ? (b.border || "none") : "1.5px dashed var(--slate)"}}>
                         </div>
                       ))}
                     </div>
-                    <div className="gc-track-note">One exam from black.</div>
+                    <div className="gc-track-note">2nd Kyu — black belt next.</div>
                   </div>
                 }
               />
@@ -1143,11 +1146,17 @@ function ParallelProgress() {
       goal: { label: "Visharad II", age: 20 },
     },
     {
-      discipline: "Karate", startAge: 7, currentAge: 17, color: "#5a6478",
+      discipline: "Karate", startAge: 5, currentAge: 17, color: "var(--accent)",
       milestones: [
-        { age: 7,  label: "White" }, { age: 9,  label: "Yellow" },
-        { age: 11, label: "Orange–Green" }, { age: 13, label: "Blue–Purple" },
-        { age: 17, label: "Brown" },
+        { age: 5,    label: "Started" },
+        { age: 5.4,  label: "Yellow belt" },
+        { age: 5.9,  label: "Orange belt" },
+        { age: 6.5,  label: "Green belt" },
+        { age: 7.25, label: "Blue belt" },
+        { age: 7.75, label: "Purple belt" },
+        { age: 9.5,  label: "Brown belt" },
+        { age: 9.6,  label: "First medal" },
+        { age: 10.75,label: "Brown/White stripe" },
       ],
       goal: { label: "Black belt", age: 19 },
     },
