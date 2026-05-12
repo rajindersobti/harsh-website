@@ -1395,24 +1395,40 @@ function CVModal({ open, onClose }) {
 
 /* ---------- TWEAKS ---------- */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "palette": "navy",
+  "palette": "aurora",
   "serifChoice": "cormorant",
   "density": "comfortable",
   "showAccent": true,
-  "accentColor": "#c66a3c"
+  "accentColor": "#0047FF"
 }/*EDITMODE-END*/;
 
 function applyTweaks(t) {
   const root = document.documentElement.style;
   const palettes = {
-    navy:    { ink: "oklch(0.22 0.01 255)", paper: "oklch(0.975 0.008 85)", navy: "oklch(0.28 0.06 255)", deep: "oklch(0.22 0.07 258)" },
-    forest:  { ink: "oklch(0.22 0.02 160)", paper: "oklch(0.97 0.01 110)", navy: "oklch(0.32 0.06 160)", deep: "oklch(0.22 0.06 158)" },
-    bordeaux:{ ink: "oklch(0.22 0.02 20)",  paper: "oklch(0.97 0.012 60)", navy: "oklch(0.32 0.08 20)", deep: "oklch(0.22 0.08 18)" },
-    graphite:{ ink: "oklch(0.18 0 0)",      paper: "oklch(0.96 0 0)",      navy: "oklch(0.28 0.005 250)", deep: "oklch(0.18 0.005 250)" },
+    /* ── Aurora Digitalis (dark) ── */
+    aurora:  {
+      ink: "#E0E6ED", paper: "#1A1640", navy: "#0047FF", deep: "#0035CC",
+      inkSoft: "#A8B3C4", slate: "#6B7A96", hairline: "rgba(255,255,255,0.10)",
+      hairlineSoft: "rgba(255,255,255,0.05)", paperDeep: "#120E30",
+    },
+    /* ── Light palettes ── */
+    navy:    { ink: "oklch(0.22 0.01 255)", paper: "oklch(0.975 0.008 85)", navy: "oklch(0.28 0.06 255)", deep: "oklch(0.22 0.07 258)",
+               inkSoft: "oklch(0.32 0.015 255)", slate: "oklch(0.55 0.02 255)", hairline: "oklch(0.86 0.01 255)", hairlineSoft: "oklch(0.92 0.008 255)", paperDeep: "oklch(0.945 0.012 85)" },
+    forest:  { ink: "oklch(0.22 0.02 160)", paper: "oklch(0.97 0.01 110)", navy: "oklch(0.32 0.06 160)", deep: "oklch(0.22 0.06 158)",
+               inkSoft: "oklch(0.34 0.02 160)", slate: "oklch(0.56 0.025 160)", hairline: "oklch(0.86 0.01 130)", hairlineSoft: "oklch(0.93 0.008 130)", paperDeep: "oklch(0.94 0.015 110)" },
+    bordeaux:{ ink: "oklch(0.22 0.02 20)",  paper: "oklch(0.97 0.012 60)", navy: "oklch(0.32 0.08 20)", deep: "oklch(0.22 0.08 18)",
+               inkSoft: "oklch(0.34 0.025 20)", slate: "oklch(0.55 0.03 20)", hairline: "oklch(0.87 0.01 50)", hairlineSoft: "oklch(0.93 0.008 50)", paperDeep: "oklch(0.945 0.015 60)" },
+    graphite:{ ink: "oklch(0.18 0 0)",      paper: "oklch(0.96 0 0)",      navy: "oklch(0.28 0.005 250)", deep: "oklch(0.18 0.005 250)",
+               inkSoft: "oklch(0.30 0 0)", slate: "oklch(0.55 0 0)", hairline: "oklch(0.86 0 0)", hairlineSoft: "oklch(0.92 0 0)", paperDeep: "oklch(0.93 0 0)" },
   };
-  const p = palettes[t.palette] || palettes.navy;
+  const p = palettes[t.palette] || palettes.aurora;
   root.setProperty("--ink", p.ink);
+  root.setProperty("--ink-soft", p.inkSoft);
+  root.setProperty("--slate", p.slate);
+  root.setProperty("--hairline", p.hairline);
+  root.setProperty("--hairline-soft", p.hairlineSoft);
   root.setProperty("--paper", p.paper);
+  root.setProperty("--paper-deep", p.paperDeep);
   root.setProperty("--navy", p.navy);
   root.setProperty("--navy-deep", p.deep);
 
