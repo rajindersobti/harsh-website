@@ -1396,7 +1396,7 @@ function CVModal({ open, onClose }) {
 /* ---------- TWEAKS ---------- */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": "ocean",
-  "serifChoice": "cormorant",
+  "serifChoice": "instrument",
   "density": "comfortable",
   "showAccent": true,
   "accentColor": "#5EBEC4"
@@ -1439,12 +1439,13 @@ function applyTweaks(t) {
   root.setProperty("--navy-deep", p.deep);
 
   const fonts = {
-    cormorant: '"Cormorant Garamond", Georgia, serif',
-    playfair: '"Playfair Display", Georgia, serif',
-    fraunces: '"Fraunces", Georgia, serif',
-    spectral: '"Spectral", Georgia, serif',
+    instrument: '"Instrument Serif", Georgia, serif',
+    cormorant:  '"Cormorant Garamond", Georgia, serif',
+    playfair:   '"Playfair Display", Georgia, serif',
+    fraunces:   '"Fraunces", Georgia, serif',
+    spectral:   '"Spectral", Georgia, serif',
   };
-  root.setProperty("--serif", fonts[t.serifChoice] || fonts.cormorant);
+  root.setProperty("--serif", fonts[t.serifChoice] || fonts.instrument);
 
   if (t.showAccent && t.accentColor) {
     root.setProperty("--accent", t.accentColor);
