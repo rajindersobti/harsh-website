@@ -1783,6 +1783,13 @@ section + section { border-top: 1px solid var(--hairline); }
   flex-shrink: 0;
 }
 
+/* belt-colour legend pip — used on Karate milestones */
+.pp-belt-pip {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
 .pp-dot-open {
   width: 10px; height: 10px;
   border-radius: 50%;

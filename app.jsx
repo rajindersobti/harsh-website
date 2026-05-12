@@ -1152,14 +1152,14 @@ function ParallelProgress() {
     {
       discipline: "Karate", startAge: 5, currentAge: 17, color: "var(--accent)",
       milestones: [
-        { age: 5,     noLabel: true, dotColor: "#f5f5f0" },
-        { age: 5.4,   noLabel: true, dotColor: "#f5c518" },
-        { age: 5.9,   noLabel: true, dotColor: "#f97316" },
-        { age: 6.5,   noLabel: true, dotColor: "#22c55e" },
-        { age: 7.25,  noLabel: true, dotColor: "#3b82f6" },
-        { age: 7.75,  noLabel: true, dotColor: "#a855f7" },
-        { age: 9.5,   noLabel: true, dotColor: "#92400e" },
-        { age: 10.75, noLabel: true, dotColor: "#b06030" },
+        { age: 5,     pip: true, noLabel: true, dotColor: "#f5f5f0" },
+        { age: 5.4,   pip: true, noLabel: true, dotColor: "#f5c518" },
+        { age: 5.9,   pip: true, noLabel: true, dotColor: "#f97316" },
+        { age: 6.5,   pip: true, noLabel: true, dotColor: "#22c55e" },
+        { age: 7.25,  pip: true, noLabel: true, dotColor: "#3b82f6" },
+        { age: 7.75,  pip: true, noLabel: true, dotColor: "#a855f7" },
+        { age: 9.5,   pip: true, noLabel: true, dotColor: "#92400e" },
+        { age: 10.75, pip: true, noLabel: true, dotColor: "#b06030" },
       ],
       goal: { label: "Black belt", age: 19 },
     },
@@ -1246,7 +1246,13 @@ function ParallelProgress() {
                   }}/>
                   {track.milestones.map((m, mi) => (
                     <div key={mi} className="pp-milestone" style={{left:`${toPercent(m.age)}%`}}>
-                      <div className="pp-dot" style={{background: m.dotColor || track.color}} />
+                      {m.pip
+                        ? <div className="pp-belt-pip" style={{
+                            background: m.dotColor,
+                            border: m.dotColor === "#f5f5f0" ? "1px solid #4A96A0" : "none",
+                          }} />
+                        : <div className="pp-dot" style={{background: m.dotColor || track.color}} />
+                      }
                       {!m.noLabel && <div className="pp-milestone-label">{m.label}</div>}
                     </div>
                   ))}
