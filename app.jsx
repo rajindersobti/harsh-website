@@ -1407,8 +1407,8 @@ function applyTweaks(t) {
   const palettes = {
     /* ── Deep Ocean (default) ── */
     ocean: {
-      ink: "#5EBEC4", paper: "#0F1F2E", navy: "#1A3344", deep: "#0F2535",
-      inkSoft: "#8ECDD1", slate: "#4A96A0", hairline: "#2D5266",
+      ink: "#D4E4E8", paper: "#0F1F2E", navy: "#1A3344", deep: "#0F2535",
+      inkSoft: "#8DA5AD", slate: "#6A8B96", hairline: "#2D5266",
       hairlineSoft: "#1E3D50", paperDeep: "#08141F",
     },
     /* ── Aurora Digitalis (dark) ── */
