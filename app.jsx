@@ -1395,16 +1395,22 @@ function CVModal({ open, onClose }) {
 
 /* ---------- TWEAKS ---------- */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "palette": "aurora",
+  "palette": "ocean",
   "serifChoice": "cormorant",
   "density": "comfortable",
   "showAccent": true,
-  "accentColor": "#0047FF"
+  "accentColor": "#5EBEC4"
 }/*EDITMODE-END*/;
 
 function applyTweaks(t) {
   const root = document.documentElement.style;
   const palettes = {
+    /* ── Deep Ocean (default) ── */
+    ocean: {
+      ink: "#D4E4E8", paper: "#0F1F2E", navy: "#1A3344", deep: "#0F2535",
+      inkSoft: "#8DA5AD", slate: "#6A8B96", hairline: "#2D5266",
+      hairlineSoft: "#1E3D50", paperDeep: "#08141F",
+    },
     /* ── Aurora Digitalis (dark) ── */
     aurora:  {
       ink: "#E0E6ED", paper: "#1A1640", navy: "#0047FF", deep: "#0035CC",
@@ -1421,7 +1427,7 @@ function applyTweaks(t) {
     graphite:{ ink: "oklch(0.18 0 0)",      paper: "oklch(0.96 0 0)",      navy: "oklch(0.28 0.005 250)", deep: "oklch(0.18 0.005 250)",
                inkSoft: "oklch(0.30 0 0)", slate: "oklch(0.55 0 0)", hairline: "oklch(0.86 0 0)", hairlineSoft: "oklch(0.92 0 0)", paperDeep: "oklch(0.93 0 0)" },
   };
-  const p = palettes[t.palette] || palettes.aurora;
+  const p = palettes[t.palette] || palettes.ocean;
   root.setProperty("--ink", p.ink);
   root.setProperty("--ink-soft", p.inkSoft);
   root.setProperty("--slate", p.slate);

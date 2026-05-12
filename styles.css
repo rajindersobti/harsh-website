@@ -1,24 +1,24 @@
 /* ============================================
    Harsh — Personal Portfolio
-   Aurora Digitalis — 2026 Dark Theme
+   Deep Ocean — Custom Dark Teal Theme
    ============================================ */
 
 :root {
-  /* ── Aurora Digitalis dark palette ── */
-  --ink:          #E0E6ED;
-  --ink-soft:     #A8B3C4;
-  --slate:        #6B7A96;
-  --slate-soft:   #3D4A62;
-  --hairline:     rgba(255, 255, 255, 0.10);
-  --hairline-soft:rgba(255, 255, 255, 0.05);
-  --paper:        #1A1640;
-  --paper-deep:   #120E30;
-  --navy:         #0047FF;
-  --navy-deep:    #0035CC;
-  --accent:       #0047FF;
-  --accent-soft:  rgba(0, 71, 255, 0.18);
-  --glass-bg:     rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.10);
+  /* ── Deep Ocean palette ── */
+  --ink:          #D4E4E8;   /* primary text   */
+  --ink-soft:     #8DA5AD;   /* secondary text */
+  --slate:        #6A8B96;   /* muted labels   */
+  --slate-soft:   #3D5C68;   /* very muted     */
+  --hairline:     #2D5266;   /* borders/dividers */
+  --hairline-soft:#1E3D50;   /* subtle dividers */
+  --paper:        #0F1F2E;   /* page background */
+  --paper-deep:   #08141F;   /* deepest bg      */
+  --navy:         #1A3344;   /* surface / cards */
+  --navy-deep:    #0F2535;   /* deeper surface  */
+  --accent:       #5EBEC4;   /* teal accent     */
+  --accent-soft:  rgba(94, 190, 196, 0.15);
+  --glass-bg:     rgba(26, 51, 68, 0.60);   /* surface glass */
+  --glass-border: #2D5266;
 
   --serif: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -62,15 +62,15 @@ p { margin: 0; text-wrap: pretty; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(26, 22, 64, 0.72);
-  backdrop-filter: saturate(160%) blur(18px);
-  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  background: rgba(15, 31, 46, 0.82);
+  backdrop-filter: saturate(140%) blur(16px);
+  -webkit-backdrop-filter: saturate(140%) blur(16px);
   border-bottom: 1px solid transparent;
   transition: border-color 0.25s ease, background 0.25s ease;
 }
 .nav.scrolled {
   border-bottom-color: var(--hairline);
-  background: rgba(26, 22, 64, 0.92);
+  background: rgba(26, 51, 68, 0.96);
 }
 .nav-inner {
   max-width: var(--max);
@@ -259,16 +259,17 @@ section + section { border-top: 1px solid var(--hairline); }
 }
 .btn-primary {
   background: var(--accent);
-  color: #ffffff;
-  box-shadow: 0 0 18px rgba(0, 71, 255, 0.45);
+  color: #0F1F2E;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(94, 190, 196, 0.30);
 }
 .btn-primary:hover {
-  background: var(--navy-deep);
-  box-shadow: 0 0 24px rgba(0, 71, 255, 0.6);
+  background: #72CDD3;
+  box-shadow: 0 0 22px rgba(94, 190, 196, 0.50);
   transform: translateY(-1px);
 }
-.btn-ghost { background: var(--glass-bg); border-color: var(--glass-border); color: var(--ink); backdrop-filter: blur(8px); }
-.btn-ghost:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
+.btn-ghost { background: var(--navy); border-color: var(--hairline); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: rgba(94,190,196,0.06); }
 .btn-arrow { transition: transform 0.2s ease; }
 .btn:hover .btn-arrow { transform: translateX(3px); }
 
@@ -468,10 +469,10 @@ section + section { border-top: 1px solid var(--hairline); }
 }
 
 /* ---- BOOKS ---- */
-.books-section { background: #0D0A28; color: var(--paper); }
-.books-section .section-num { color: var(--slate-soft); border-top-color: var(--glass-border); }
-.books-section .section-title em { color: var(--slate-soft); }
-.books-section .section-kicker { color: #60A5FA; }
+.books-section { background: var(--paper-deep); color: var(--ink); }
+.books-section .section-num { color: var(--slate); border-top-color: var(--hairline); }
+.books-section .section-title em { color: var(--ink-soft); }
+.books-section .section-kicker { color: var(--accent); }
 
 .book {
   display: grid;
@@ -1906,97 +1907,119 @@ section + section { border-top: 1px solid var(--hairline); }
 }
 
 /* ════════════════════════════════════════════════════
-   AURORA DIGITALIS — Glass & Glow Utilities
+   DEEP OCEAN — Surface, Contrast & Teal Accent Utils
    ════════════════════════════════════════════════════ */
 
-/* Hero portrait glass shimmer */
+/* Hero portrait — surface tone */
 .hero-portrait {
-  background: linear-gradient(135deg, rgba(0,71,255,0.12) 0%, rgba(26,22,64,0.9) 100%);
-  border-color: var(--glass-border);
+  background: linear-gradient(135deg, rgba(94,190,196,0.08) 0%, #0F2535 100%);
+  border-color: var(--hairline);
 }
 .placeholder {
   background-image:
     repeating-linear-gradient(
       135deg,
       transparent 0 14px,
-      rgba(255,255,255,0.04) 14px 15px
+      rgba(94,190,196,0.05) 14px 15px
     );
 }
 
-/* Accent text glow */
+/* Accent text — teal, no glow (keeps readability) */
 .hero h1 .accent,
 .about-narrative .drop {
-  text-shadow: 0 0 32px rgba(0, 71, 255, 0.55);
+  color: var(--accent);
+  text-shadow: none;
 }
 
-/* Glance cards subtle glow on hover */
+/* Glance cards hover number tint */
 .gc-flip-wrapper:hover .glance-num {
-  text-shadow: 0 0 20px rgba(0, 71, 255, 0.4);
+  color: var(--accent);
 }
 
-/* Social links glass */
+/* Social links — surface bg */
 .social-link {
-  background: var(--glass-bg) !important;
-  backdrop-filter: blur(8px);
-  border-color: var(--glass-border) !important;
+  background: var(--navy) !important;
+  border-color: var(--hairline) !important;
 }
 .social-link:hover {
-  border-color: rgba(0,71,255,0.5) !important;
-  background: rgba(0,71,255,0.12) !important;
-  box-shadow: 0 0 16px rgba(0,71,255,0.25);
+  border-color: var(--accent) !important;
+  background: rgba(94,190,196,0.10) !important;
+  color: var(--accent) !important;
 }
 
-/* nav CTA plasma button */
+/* nav CTA — teal accent pill */
 .nav-cta {
   background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 0 14px rgba(0,71,255,0.4);
+  color: #0F1F2E !important;
+  font-weight: 600 !important;
+  box-shadow: none;
 }
 .nav-cta:hover {
-  background: var(--navy-deep) !important;
-  box-shadow: 0 0 20px rgba(0,71,255,0.6);
+  background: #72CDD3 !important;
+  box-shadow: none;
 }
 
-/* active nav link underline glow */
+/* active nav link underline — teal */
 .nav-link.active::after {
-  box-shadow: 0 0 8px rgba(0,71,255,0.8);
+  background: var(--accent);
+  box-shadow: none;
 }
 
-/* scroll progress bar glow */
+/* scroll progress bar */
 .scroll-progress {
-  box-shadow: 0 0 6px rgba(0,71,255,0.7);
+  background: var(--accent);
+  box-shadow: none;
 }
 
-/* origami tile glass overlay */
+/* origami insta overlay */
 .origami-insta:hover {
-  box-shadow: 0 0 20px rgba(0,71,255,0.35);
+  box-shadow: none;
 }
 
-/* footer dark glass */
+/* footer */
 footer {
-  background: #0D0A28 !important;
-  border-top-color: var(--glass-border) !important;
+  background: var(--paper-deep) !important;
+  border-top-color: var(--hairline) !important;
 }
 
-/* section stripes on dark */
+/* section dividers */
 section + section {
   border-top-color: var(--hairline);
 }
 
-/* belt colors stay vibrant on dark */
-.belt.b-white { background: rgba(255,255,255,0.12); color: var(--ink); border-color: var(--glass-border); }
+/* belt — surface tones */
+.belt.b-white { background: var(--navy); color: var(--ink); border-color: var(--hairline); }
 
-/* about-card / pp-track backgrounds */
-.pp-line-active { box-shadow: 0 0 8px rgba(0,71,255,0.5); }
+/* pp-track active line */
+.pp-line-active { box-shadow: none; }
 
-/* disc tabs glass */
+/* disc tabs — surface */
 .disc-tabs {
-  background: var(--glass-bg);
-  border-color: var(--glass-border);
-  backdrop-filter: blur(8px);
+  background: var(--navy);
+  border-color: var(--hairline);
+  backdrop-filter: none;
 }
 .disc-tab.active {
-  background: rgba(0,71,255,0.18) !important;
-  color: var(--ink) !important;
-  box-shadow: 0 0 12px rgba(0,71,255,0.3);
+  background: rgba(94,190,196,0.12) !important;
+  color: var(--accent) !important;
+  box-shadow: none;
 }
+
+/* ensure all text on surface cards is readable */
+.ec-card, .course, .gc-flip-wrapper {
+  color: var(--ink);
+}
+.ec-body, .glance-tag, .course-name {
+  color: var(--ink-soft);
+}
+
+/* about section text guarantee */
+.about-narrative { color: var(--ink); }
+.about-narrative p { color: var(--ink); }
+
+/* section-num labels on dark */
+.section-num { color: var(--slate); border-top-color: var(--hairline); }
+
+/* book section dark band */
+.books-section { background: var(--paper-deep) !important; }
+.books-section .section-kicker { color: var(--accent) !important; }
