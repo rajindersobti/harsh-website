@@ -1152,7 +1152,7 @@ function ParallelProgress() {
       goal: { label: "Black belt", age: 19 },
     },
     {
-      discipline: "Books", startAge: 10, currentAge: 17, color: "var(--navy)",
+      discipline: "Books", startAge: 10, currentAge: 17, color: "var(--accent)",
       milestones: [
         { age: 10, label: "First draft" }, { age: 12, label: "Book I" },
         { age: 15, label: "Book II" }, { age: 17, label: "Book III — writing" },
