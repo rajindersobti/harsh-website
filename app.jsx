@@ -136,12 +136,16 @@ const TIMELINE_DATA = [
     discipline: "Karate",
     color: "var(--accent)",
     icon: "◎",
-    startAge: 7,
+    startAge: 5,
     events: [
-      { age: 7,  note: "White belt. Started the long game." },
-      { age: 11, note: "Green belt — first grading I nearly failed." },
-      { age: 14, note: "Blue–Purple. District gold medal." },
-      { age: 17, note: "Brown belt. Covid pause behind me. Black belt ahead." },
+      { age: 5,    note: "White belt. May 2014 — started at 5." },
+      { age: 5.4,  note: "Yellow belt. Oct 2014 — first grading passed." },
+      { age: 5.9,  note: "Orange belt. Mar 2015." },
+      { age: 6.5,  note: "Green belt. Dec 2015." },
+      { age: 7.25, note: "Blue belt. Sep 2016." },
+      { age: 7.75, note: "Purple belt. Feb 2017." },
+      { age: 9.5,  note: "Brown belt. Dec 2018. First medal the next month." },
+      { age: 10.75,note: "Brown/White stripe (2nd Kyu). Feb 2020. Black belt next." },
     ],
   },
   {
@@ -1148,15 +1152,14 @@ function ParallelProgress() {
     {
       discipline: "Karate", startAge: 5, currentAge: 17, color: "var(--accent)",
       milestones: [
-        { age: 5,    label: "Started" },
-        { age: 5.4,  label: "Yellow belt" },
-        { age: 5.9,  label: "Orange belt" },
-        { age: 6.5,  label: "Green belt" },
-        { age: 7.25, label: "Blue belt" },
-        { age: 7.75, label: "Purple belt" },
-        { age: 9.5,  label: "Brown belt" },
-        { age: 9.6,  label: "First medal" },
-        { age: 10.75,label: "Brown/White stripe" },
+        { age: 5,     noLabel: true, dotColor: "#f5f5f0" },
+        { age: 5.4,   noLabel: true, dotColor: "#f5c518" },
+        { age: 5.9,   noLabel: true, dotColor: "#f97316" },
+        { age: 6.5,   noLabel: true, dotColor: "#22c55e" },
+        { age: 7.25,  noLabel: true, dotColor: "#3b82f6" },
+        { age: 7.75,  noLabel: true, dotColor: "#a855f7" },
+        { age: 9.5,   noLabel: true, dotColor: "#92400e" },
+        { age: 10.75, noLabel: true, dotColor: "#b06030" },
       ],
       goal: { label: "Black belt", age: 19 },
     },
@@ -1243,8 +1246,8 @@ function ParallelProgress() {
                   }}/>
                   {track.milestones.map((m, mi) => (
                     <div key={mi} className="pp-milestone" style={{left:`${toPercent(m.age)}%`}}>
-                      <div className="pp-dot" style={{background: track.color}} />
-                      <div className="pp-milestone-label">{m.label}</div>
+                      <div className="pp-dot" style={{background: m.dotColor || track.color}} />
+                      {!m.noLabel && <div className="pp-milestone-label">{m.label}</div>}
                     </div>
                   ))}
                   <div className="pp-milestone pp-goal-dot" style={{left:`${toPercent(track.goal.age)}%`}}>
