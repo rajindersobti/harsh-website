@@ -1249,7 +1249,7 @@ function ParallelProgress() {
                       {m.pip
                         ? <div className="pp-belt-pip" style={{
                             background: m.dotColor,
-                            border: m.dotColor === "#f5f5f0" ? "1px solid #4A96A0" : "none",
+                            outline: m.dotColor === "#f5f5f0" ? "1px solid #4A96A0" : "none",
                           }} />
                         : <div className="pp-dot" style={{background: m.dotColor || track.color}} />
                       }

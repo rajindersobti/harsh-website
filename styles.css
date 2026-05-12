@@ -1775,6 +1775,7 @@ section + section { border-top: 1px solid var(--hairline); }
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 2;
 }
 
 .pp-dot {
@@ -1785,9 +1786,10 @@ section + section { border-top: 1px solid var(--hairline); }
 
 /* belt-colour legend pip — used on Karate milestones */
 .pp-belt-pip {
-  width: 14px; height: 14px;
+  width: 16px; height: 16px;
   border-radius: 3px;
   flex-shrink: 0;
+  margin-top: -1px;  /* vertically centre on the track line (top:7px) */
 }
 
 .pp-dot-open {
