@@ -67,28 +67,18 @@ function Nav() {
             <a key={n.id} href={`#${n.id}`} className={`nav-link ${active === n.id ? "active" : ""}`}>{n.label}</a>
           ))}
         </div>
-        <a href="#" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent("openCVModal")); }} className="nav-cta">Request CV →</a>
       </div>
       <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }}></div>
     </nav>
   );
 }
 
-/* ---------- FEATURE 1: GLANCE CARD FLIP ---------- */
-function GlanceCard({ num, sup, tag, detail }) {
-  const [flipped, setFlipped] = React.useState(false);
+/* ---------- FEATURE 1: GLANCE CARD ---------- */
+function GlanceCard({ num, sup, tag }) {
   return (
-    <div
-      className={`glance-card gc-flip-wrapper ${flipped ? "flipped" : ""}`}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
-      onClick={() => setFlipped(f => !f)}
-    >
-      <div className="gc-front">
-        <div className="glance-num">{num}<sup>{sup}</sup></div>
-        <div className="glance-tag">{tag}</div>
-      </div>
-      <div className="gc-back">{detail}</div>
+    <div className="glance-card">
+      <div className="glance-num">{num}<sup>{sup}</sup></div>
+      <div className="glance-tag">{tag}</div>
     </div>
   );
 }
@@ -102,34 +92,35 @@ const TIMELINE_DATA = [
     startAge: 3,
     events: [
       { age: 3,  note: "First lesson — instrument bigger than I was." },
-      { age: 7,  note: "First taal mastered." },
-      { age: 11, note: "First public recital." },
-      { age: 15, note: "Visharad Part I — Distinction." },
-      { age: 17, note: "All-India Junior finalist. Visharad II next." },
+      { age: 6,  note: "Purna exam — Distinction. Bangiya Sangeet Parishad." },
+      { age: 7,  note: "Junior Diploma — Distinction." },
+      { age: 9,  note: "Senior Diploma — Distinction." },
+      { age: 10, note: "Fourth year exam — Distinction." },
+      { age: 16, note: "Sixth year exam — First Division." },
     ],
   },
   {
     discipline: "Books",
     color: "var(--accent)",
     icon: "✦",
-    startAge: 10,
+    startAge: 11,
     events: [
-      { age: 10, note: "First real draft — written in a notebook." },
+      { age: 11, note: "First real draft — written in a notebook." },
       { age: 12, note: "Land of Horrors published on Amazon." },
-      { age: 15, note: "Second book: three years more deliberate." },
-      { age: 17, note: "Book III in progress — ~8,000 words." },
+      { age: 16, note: "Second book: four years more deliberate." },
+      { age: 17, note: "Book III in progress." },
     ],
   },
   {
     discipline: "Origami",
     color: "var(--accent)",
     icon: "◆",
-    startAge: 12,
+    startAge: 7,
     events: [
-      { age: 12, note: "Basic cranes and modular forms." },
-      { age: 14, note: "Tessellations — designing before folding." },
-      { age: 16, note: "Curved creases and modular peacock (5000+ units)." },
-      { age: 17, note: "Instagram: @geometricfolds." },
+      { age: 7,  note: "Basic cranes and modular forms." },
+      { age: 13, note: "Tessellations — designing before folding." },
+      { age: 15, note: "Curved creases and modular peacock (5000+ units)." },
+      { age: 16, note: "Instagram: @geometricfolds." },
     ],
   },
   {
@@ -278,114 +269,17 @@ function Hero() {
 
         <FadeUp delay={0.25}>
           <div className="glance">
-            <div className="glance-label">— A Quick Glance <span className="glance-hint">hover to explore</span></div>
+            <div className="glance-label">— A Quick Glance</div>
             <div className="glance-grid">
-              <GlanceCard num="02" sup="books" tag="Authored & published — available on Amazon."
-                detail={
-                  <div className="gc-track-wrap">
-                    <div className="gc-track-label">Publication arc</div>
-                    <div className="gc-dot-track">
-                      <div className="gc-dot-row">
-                        <span className="gc-dot filled" style={{left:"0%"}}/>
-                        <span className="gc-dot filled" style={{left:"50%"}}/>
-                        <span className="gc-dot open"   style={{left:"85%"}}/>
-                        <div className="gc-track-line"/>
-                      </div>
-                      <div className="gc-dot-labels">
-                        <span style={{left:"0%"}}>Age 12</span>
-                        <span style={{left:"50%"}}>Age 15</span>
-                        <span style={{left:"85%"}}>Age 17</span>
-                      </div>
-                    </div>
-                    <div className="gc-track-note">Gap shrinking. Acceleration real.</div>
-                  </div>
-                }
-              />
-              <GlanceCard num="13" sup="yrs" tag="Of tabla, from first taal to advanced compositions."
-                detail={
-                  <div className="gc-track-wrap">
-                    <div className="gc-track-label">13-year arc</div>
-                    <div className="gc-dot-track">
-                      <div className="gc-dot-row">
-                        {[["0%","2013"],["28%","2017"],["55%","2021"],["78%","2023"],["100%","2026"]].map(([pos,yr],i) => (
-                          <span key={i} className={`gc-dot ${i < 4 ? "filled" : "open"}`} style={{left:pos}}>
-                            <span className="gc-yr">{yr}</span>
-                          </span>
-                        ))}
-                        <div className="gc-track-line"/>
-                      </div>
-                    </div>
-                    <div className="gc-track-note">Visharad II — 2026 target.</div>
-                  </div>
-                }
-              />
-              <GlanceCard num="08" sup="belts" tag="Belts earned in karate — currently brown/white stripe."
-                detail={
-                  <div className="gc-track-wrap">
-                    <div className="gc-track-label">White → Brown/White → Black</div>
-                    <div className="gc-belt-row">
-                      {[
-                        {c:"#f5f5f0",border:"1px solid #ccc",done:true},
-                        {c:"#f5c518",done:true},
-                        {c:"#f97316",done:true},
-                        {c:"#22c55e",done:true},
-                        {c:"#3b82f6",done:true},
-                        {c:"#a855f7",done:true},
-                        {c:"#92400e",done:true},
-                        {c:"linear-gradient(135deg,#92400e 50%,#f5f5f0 50%)",done:true},
-                        {c:"transparent",done:false},
-                      ].map((b,i) => (
-                        <div key={i} className={`gc-belt-pip ${b.done ? "" : "gc-belt-goal"}`}
-                          style={{background: b.done ? b.c : "transparent",
-                                  border: b.done ? (b.border || "none") : "1.5px dashed var(--slate)"}}>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="gc-track-note">2nd Kyu — black belt next.</div>
-                  </div>
-                }
-              />
-              <GlanceCard num="11" sup="MUNs" tag="Conferences debated; six awards across committees."
-                detail={
-                  <div className="gc-track-wrap">
-                    <div className="gc-track-label">Role progression</div>
-                    <div className="gc-role-track">
-                      <div className="gc-role">Delegate<span className="gc-role-yr">2022</span></div>
-                      <div className="gc-role-arrow">→</div>
-                      <div className="gc-role">Award winner<span className="gc-role-yr">2022–24</span></div>
-                      <div className="gc-role-arrow">→</div>
-                      <div className="gc-role gc-role-current">Director<span className="gc-role-yr">2025</span></div>
-                    </div>
-                    <div className="gc-track-note">6 awards — UNHRC, DISEC, Historical.</div>
-                  </div>
-                }
-              />
-              <GlanceCard num="02" sup="papers" tag="Authored research, one under review and one in progress."
-                detail={
-                  <div className="gc-track-wrap">
-                    <div className="gc-track-label">Research timeline</div>
-                    <div className="gc-dot-track">
-                      <div className="gc-dot-row">
-                        <span className="gc-dot filled" style={{left:"0%"}}/>
-                        <span className="gc-dot filled" style={{left:"45%"}}/>
-                        <span className="gc-dot open"   style={{left:"80%"}}/>
-                        <div className="gc-track-line"/>
-                      </div>
-                      <div className="gc-dot-labels">
-                        <span style={{left:"0%"}}>Zero exp.</span>
-                        <span style={{left:"45%"}}>Paper 1</span>
-                        <span style={{left:"80%"}}>Published</span>
-                      </div>
-                    </div>
-                    <div className="gc-track-note">18 months from start to under review.</div>
-                  </div>
-                }
-              />
+              <GlanceCard num="02" sup="books" tag="Authored & published — available on Amazon." />
+              <GlanceCard num="13" sup="yrs" tag="Of tabla, from first lesson to advanced examinations." />
+              <GlanceCard num="08" sup="belts" tag="Belts earned in karate — currently brown/white stripe." />
+              <GlanceCard num="07" sup="MUNs" tag="Conferences debated; two awards across committees." />
+              <GlanceCard num="02" sup="papers" tag="Authored research, one under review and one in progress." />
             </div>
           </div>
         </FadeUp>
 
-        <GrowthTimeline />
       </div>
     </section>
   );
@@ -398,22 +292,21 @@ function About() {
       <div className="wrap">
         <FadeUp>
           <div className="section-head">
-            <div className="section-num">01 — About</div>
+            <div className="section-num">02 — About</div>
             <div>
               <span className="section-kicker">Narrative</span>
-              <h2 className="section-title">A multidimensional <em>upbringing.</em></h2>
+              <h2 className="section-title">A multidimensional upbringing.</h2>
             </div>
           </div>
         </FadeUp>
 
         <div className="about-grid">
-          <div className="section-num" style={{ borderTop: "none", paddingTop: 0, marginTop: 4 }}>INTRODUCTION</div>
+          <div />
           <FadeUp>
             <div className="about-narrative">
               <p><span className="drop">I</span> grew up in a house where every question had room to breathe. We don't really do the dinner-table thing — we gather around ideas instead, turning them over from every angle, arguing the way other families pass the salt. My dad lives somewhere between his work and his health routine. My mom is my creative compass: she's the one who handed me my first paintbrush, and the one who sat me down at my first tabla when I was three and the instrument was honestly bigger than I was. I was the kid who asked too many questions, and somehow nobody ever told me to stop.</p>
-              <p>Books showed up at our place faster than anyone could finish them. My dad and I keep a running monthly tally of who's read more, and — sorry Dad — it hasn't been close in a while. I published my first book at twelve and the second one three years later. Music came early too, and rhythm became more than a skill for me; it's where I go when the world gets loud. Origami has been a steady companion for the last five years — quieter than the rest, but it taught me what patience actually feels like in my hands.</p>
-              <p>Fitness is non-negotiable. I started karate at seven and made it to second brown belt before Covid pressed pause on the whole thing. The black belt is still on the list. Badminton and cycling fill in the gaps.</p>
-              <p>Here's the thing I've figured out, though: none of these threads are actually separate. The patience it takes to hold a folded paper crease in place for forty-five seconds is the same patience that sits through a long taal cycle, or a longer research review. It's all the same thing, just speaking <em style={{ fontStyle: "italic", color: "var(--accent)" }}>different languages.</em></p>
+              <p>Books showed up at our place faster than anyone could finish them. My dad and I keep a running monthly tally of who's read more, and — sorry Dad — it hasn't been close in a while. I published my first book at twelve and the second one four years later. Music came early too, and rhythm became more than a skill for me; it's where I go when the world gets loud. Origami has been a steady companion for the last ten years — quieter than the rest, but it taught me what patience actually feels like in my hands.</p>
+              <p>Fitness is non-negotiable. I started karate at five and made it to second brown belt before Covid pressed pause on the whole thing. Badminton and cycling fill in the gaps.</p>
             </div>
           </FadeUp>
 
@@ -433,37 +326,20 @@ function About() {
               </div>
               <div className="trait">
                 <div className="trait-name">Articulate</div>
-                <div className="trait-body">Eleven MUNs taught me that good arguments respect the room as much as the resolution.</div>
+                <div className="trait-body">Seven MUNs taught me that good arguments respect the room as much as the resolution.</div>
               </div>
             </div>
           </FadeUp>
         </div>
 
-        {/* Aspirations */}
-        <FadeUp>
-          <div className="asp-grid">
-            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>ASPIRATIONS</div>
-            <div>
-              <span className="section-kicker">— Where I'm Going</span>
-              <div className="asp-pull">
-                I want a life where <em>making, performing, and proving</em> aren't kept in separate rooms.
-              </div>
-              <div className="asp-body">
-                <p>My short-term goal is to study where a research-first mindset is encouraged — somewhere I can take a math seminar in the morning, draft a paper in the afternoon, and play something on a Friday night without one feeling like a hobby and the other a calling.</p>
-                <p>Longer term, I want to use what I learn to make work that lasts. A third book by twenty. A peer-reviewed publication before I graduate undergrad. A black belt eventually. And, somewhere in there, the kind of friendships that are built by working on hard things together.</p>
-              </div>
-            </div>
-          </div>
-        </FadeUp>
-
         {/* Extracurriculars */}
         <FadeUp>
           <div className="ec-grid">
-            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>EXTRA-CURRICULARS</div>
+            <div />
             <div>
               <span className="section-kicker">— Leadership & Voice</span>
               <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 400, marginBottom: 32, maxWidth: "20ch", lineHeight: 1.15 }}>
-                Speaking, organizing, <em style={{ color: "var(--accent)", fontStyle: "italic" }}>and showing up</em>.
+                Speaking, organizing, and showing up.
               </h3>
               <div className="ec-cards">
                 <div className="ec-card">
@@ -475,8 +351,8 @@ function About() {
                 <div className="ec-card">
                   <div className="ec-icon">M</div>
                   <div className="ec-title">Model UN</div>
-                  <div className="ec-body">Eleven conferences, six awards across UNHRC, DISEC, and Historical committees. Director of the school's hosted MUN in 2025.</div>
-                  <div className="ec-meta"><span>2022 — present</span><span>Director</span></div>
+                  <div className="ec-body">Seven conferences, two awards across UNODC and DISEC committees. Director of the school's hosted MUN in 2025.</div>
+                  <div className="ec-meta"><span>2023 — present</span><span>Director</span></div>
                 </div>
                 <div className="ec-card">
                   <div className="ec-icon">L</div>
@@ -500,10 +376,10 @@ function Books() {
       <div className="wrap">
         <FadeUp>
           <div className="section-head">
-            <div className="section-num">02 — Books</div>
+            <div className="section-num">03 — Books</div>
             <div>
               <span className="section-kicker">Authored Works</span>
-              <h2 className="section-title">Two volumes, <em>twice the questions.</em></h2>
+              <h2 className="section-title">Two volumes, twice the questions.</h2>
             </div>
           </div>
         </FadeUp>
@@ -523,7 +399,7 @@ function Books() {
               <div className="book-stats">
                 <div className="book-stat"><span className="lbl">Series</span><span className="val">Cowland · I</span></div>
                 <div className="book-stat"><span className="lbl">Genre</span><span className="val">Middle-grade adventure</span></div>
-                <div className="book-stat"><span className="lbl">Published</span><span className="val">2023</span></div>
+                <div className="book-stat"><span className="lbl">Published</span><span className="val">2021</span></div>
                 <div className="book-stat"><span className="lbl">ISBN</span><span className="val">1639045686</span></div>
               </div>
               <a href="https://www.amazon.in/Land-Horrors-Book-Adventures-Cowland/dp/1639045686/" target="_blank" rel="noopener" className="amazon-cta">Buy on Amazon <span style={{ fontSize: 18 }}>→</span></a>
@@ -566,24 +442,18 @@ function Creativity() {
       <div className="wrap">
         <FadeUp>
           <div className="section-head">
-            <div className="section-num">03 — Creativity</div>
+            <div className="section-num">04 — Creativity</div>
             <div>
               <span className="section-kicker">Three Disciplines</span>
-              <h2 className="section-title">Paper, percussion, <em>persistence.</em></h2>
+              <h2 className="section-title">Paper, percussion, persistence.</h2>
             </div>
           </div>
         </FadeUp>
 
         <FadeUp>
-          <div className="creativity-intro">
-            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>INTRO</div>
-            <div className="creativity-pull">
-              Three practices, one <em>shared grammar:</em> repetition until precision becomes instinct.
-            </div>
-            <div className="creativity-body">
-              <p>I picked up origami the same year I started tabla, and karate two years later. They didn't feel related at the time. They do now. Each one is a way of practicing the same skill — listening to a difficult thing closely enough to make it look easy.</p>
-            </div>
-          </div>
+          <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65, maxWidth: "62ch", marginBottom: 48 }}>
+            I started tabla at three, karate at five, and origami at seven. They didn't feel related at the time. They do now. Each one is a way of practicing the same skill — listening to a difficult thing closely enough to make it look easy.
+          </p>
         </FadeUp>
 
         <div className="disc-tabs">
@@ -781,9 +651,6 @@ function Origami() {
         <div>
           <div className="sub">— Foundational Principles</div>
           <h3>The grammar behind the fold.</h3>
-          <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65 }}>
-            I work primarily within the Yoshizawa–Randlett notation, but the most interesting territory for me lies in tessellation and curved-crease surfaces — folds that behave like equations more than diagrams.
-          </p>
           <div className="social-row">
             <a href="https://www.instagram.com/geometricfolds?igsh=MTh2YjltdDA3Y25xeA==" target="_blank" rel="noopener" className="social-link">
               <span style={{ width: 14, height: 14, border: "1.5px solid currentColor", borderRadius: 4, display: "inline-block" }}></span>
@@ -793,34 +660,9 @@ function Origami() {
           </div>
         </div>
         <div>
-          <div className="principle">
-            <div className="pn">PRINCIPLE 01</div>
-            <div>
-              <div className="name">Yoshizawa–Randlett system</div>
-              <div className="desc">The standard notation of valley/mountain folds, dotted axes, and reverse folds — the alphabet from which every diagram is written.</div>
-            </div>
-          </div>
-          <div className="principle">
-            <div className="pn">PRINCIPLE 02</div>
-            <div>
-              <div className="name">Tessellations & flat-foldability</div>
-              <div className="desc">Crease patterns that tile a plane and obey Maekawa's theorem (M − V = ±2 at every interior vertex). My tessellation pieces are designed before they're folded.</div>
-            </div>
-          </div>
-          <div className="principle">
-            <div className="pn">PRINCIPLE 03</div>
-            <div>
-              <div className="name">Curved creases</div>
-              <div className="desc">Folding along arcs instead of straight lines, where the paper itself becomes the form-finder — bending into ruled surfaces and developable geometries that no flat-fold sequence can produce.</div>
-            </div>
-          </div>
-          <div className="principle">
-            <div className="pn">PRINCIPLE 04</div>
-            <div>
-              <div className="name">Modular construction</div>
-              <div className="desc">Assemblies of dozens or hundreds of identical units — kusudama, sonobe, polyhedra — which behave less like art and more like combinatorial geometry.</div>
-            </div>
-          </div>
+          <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65 }}>
+            I work within the Yoshizawa–Randlett notation — valley and mountain folds, dotted axes, reverse folds — but the territory that interests me most is tessellation and curved-crease work. Tessellations are designed before they're folded: crease patterns that tile a plane and satisfy Maekawa's theorem at every interior vertex. Curved creases go further, folding along arcs so the paper itself becomes the form-finder, bending into developable geometries no flat-fold sequence can produce. Modular construction — kusudama, sonobe, polyhedra built from hundreds of identical units — closes the loop: it behaves less like art and more like combinatorial geometry.
+          </p>
         </div>
       </div>
     </FadeUp>
@@ -830,19 +672,20 @@ function Origami() {
 function Tabla() {
   const timeline = [
     { yr: "2013", title: "First lesson", milestone: true },
-    { yr: "2015", title: "Teentaal mastered" },
-    { yr: "2017", title: "First public recital", milestone: true },
-    { yr: "2019", title: "Advanced compositions" },
-    { yr: "2021", title: "Visharad — part I" },
-    { yr: "2023", title: "All-India junior finalist", milestone: true },
-    { yr: "2026", title: "Visharad — part II" },
+    { yr: "2015", title: "First exam (Purna) — Distinction", milestone: true },
+    { yr: "2016", title: "Junior Diploma — Distinction" },
+    { yr: "2017", title: "Second year exam — Distinction" },
+    { yr: "2018", title: "Senior Diploma — Distinction", milestone: true },
+    { yr: "2019", title: "Fourth year exam — Distinction" },
+    { yr: "2025", title: "Sixth year exam — First Division", milestone: true },
   ];
   const trophies = [
-    { yr: "2023", nm: "All-India Junior Tabla Competition", grade: "Finalist" },
-    { yr: "2022", nm: "State Classical Music Festival", grade: "Gold" },
-    { yr: "2021", nm: "Pracheen Kala Kendra Visharad I", grade: "Distinction" },
-    { yr: "2020", nm: "Inter-school Solo — Open category", grade: "1st place" },
-    { yr: "2018", nm: "Regional Young Artist Showcase", grade: "Honourable" },
+    { yr: "2015", nm: "First exam (Purna) — Bangiya Sangeet Parishad · Rabindra Bharati University", grade: "Distinction" },
+    { yr: "2016", nm: "Junior Diploma — Bangiya Sangeet Parishad · Rabindra Bharati University", grade: "Distinction" },
+    { yr: "2017", nm: "Second year exam — Bangiya Sangeet Parishad · Rabindra Bharati University", grade: "Distinction" },
+    { yr: "2018", nm: "Senior Diploma — Bangiya Sangeet Parishad · Rabindra Bharati University", grade: "Distinction" },
+    { yr: "2019", nm: "Fourth year exam — Bangiya Sangeet Parishad · Rabindra Bharati University", grade: "Distinction" },
+    { yr: "2025", nm: "Sixth year exam — Bangiya Sangeet Parishad · Rabindra Bharati University", grade: "First Division" },
   ];
   return (
     <FadeUp>
@@ -851,7 +694,7 @@ function Tabla() {
           <div className="tabla-years">13<sub>years</sub></div>
         </div>
         <div className="tabla-blurb">
-          <p>Thirteen years on the same pair of drums. The bayan and dayan have outlasted three teachers, two cities, and every other hobby I've ever started. Tabla isn't the thing I'm best at — it's the thing I'm most patient with, which is probably why I keep coming back.</p>
+          <p>Thirteen years on the same pair of drums. The bayan and dayan have outlasted every other hobby I've ever started. Tabla isn't the thing I'm best at — it's the thing I'm most patient with, which is probably why I keep coming back.</p>
         </div>
       </div>
 
@@ -869,9 +712,9 @@ function Tabla() {
 
       <div className="trophy-case">
         <div>
-          <div className="glance-label">— Trophy Case</div>
-          <h3 style={{ fontFamily: "var(--serif)", fontSize: 32, fontWeight: 400, marginBottom: 6 }}>Certificates & competitions</h3>
-          <p style={{ fontSize: 14.5, color: "var(--ink-soft)", marginTop: 8, maxWidth: "32ch" }}>A handful of the recognitions that have come along the way. The full list is in the application packet.</p>
+          <div className="glance-label">— Examinations</div>
+          <h3 style={{ fontFamily: "var(--serif)", fontSize: 32, fontWeight: 400, marginBottom: 6 }}>Certifications & results</h3>
+          <p style={{ fontSize: 14.5, color: "var(--ink-soft)", marginTop: 8, maxWidth: "32ch" }}>All exams under Bangiya Sangeet Parishad · Rabindra Bharati University.</p>
         </div>
         <div className="trophy-list">
           {trophies.map((t, i) => (
@@ -896,20 +739,13 @@ function Tabla() {
 }
 
 function Karate() {
-  const medals = [
-    { place: "1st", placeCls: "gold", tour: "State Open — Kumite (U-17)", yr: "2025", cat: "Sparring · 65kg" },
-    { place: "2nd", tour: "Regional Inter-Style Tournament", yr: "2024", cat: "Kata · individual" },
-    { place: "1st", placeCls: "gold", tour: "District Championship", yr: "2024", cat: "Sparring · open" },
-    { place: "3rd", tour: "All-India Schools Karate Cup", yr: "2023", cat: "Kata · team" },
-    { place: "2nd", tour: "City Belt Trials", yr: "2022", cat: "Sparring · U-15" },
-  ];
   return (
     <FadeUp>
       <div className="karate-hero">
         <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>BELT JOURNEY</div>
         <div>
           <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: 1.05, fontWeight: 400, marginBottom: 18 }}>
-            Eight years from <em style={{ fontStyle: "italic", color: "var(--accent)" }}>white</em> to <em style={{ fontStyle: "italic", color: "var(--accent)" }}>brown.</em>
+            Eight years from white to brown.
           </h3>
           <p style={{ fontSize: 15.5, color: "var(--ink-soft)", lineHeight: 1.65, maxWidth: "44ch" }}>
             What I've learned in the dojo doesn't show up in the medals — it shows up in how I lose. Karate is the practice that made me unafraid of being beginner-level at something for years before getting good.
@@ -929,32 +765,16 @@ function Karate() {
 
       <div className="karate-stats">
         <div className="kstat">
-          <div className="num">14</div>
-          <div className="lbl">— Tournament medals</div>
-        </div>
-        <div className="kstat">
           <div className="num">08</div>
           <div className="lbl">— Years of training</div>
         </div>
       </div>
 
       <div>
-        <div className="glance-label">— Selected results</div>
-        <table className="medal-table">
-          <thead>
-            <tr><th>Place</th><th>Tournament</th><th>Year</th><th>Category</th></tr>
-          </thead>
-          <tbody>
-            {medals.map((m, i) => (
-              <tr key={i}>
-                <td className={`place ${m.placeCls || ""}`}>{m.place}</td>
-                <td className="tour">{m.tour}</td>
-                <td className="yr">{m.yr}</td>
-                <td className="cat">{m.cat}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="glance-label">— Tournament</div>
+        <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65, maxWidth: "44ch" }}>
+          First and only tournament entered — January 2019, the month after earning the brown belt. Won 1 medal.
+        </p>
       </div>
 
       <div className="discipline-quote">
@@ -995,21 +815,21 @@ function Academics() {
       <div className="wrap">
         <FadeUp>
           <div className="section-head">
-            <div className="section-num">04 — Academics</div>
+            <div className="section-num">05 — Academics</div>
             <div>
               <span className="section-kicker">Curriculum & Research</span>
-              <h2 className="section-title">The classroom <em>and what it spills into.</em></h2>
+              <h2 className="section-title">The classroom and what it spills into.</h2>
             </div>
           </div>
         </FadeUp>
 
         <FadeUp>
           <div className="acad-grid">
-            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>CURRICULUM</div>
+            <div />
             <div>
               <span className="section-kicker">— 11th Standard</span>
               <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 400, marginBottom: 24, maxWidth: "20ch", lineHeight: 1.15 }}>
-                Sciences with a literary <em style={{ fontStyle: "italic", color: "var(--accent)" }}>shadow.</em>
+                Sciences with a literary shadow.
               </h3>
               <p style={{ color: "var(--ink-soft)", fontSize: 15.5, lineHeight: 1.65, maxWidth: "44ch" }}>
                 I lean toward STEM, but I refuse to give up the humanities. My current focus is the overlap — the math of music, the geometry of paper, the rhetoric of science.
@@ -1018,7 +838,6 @@ function Academics() {
             <div className="curriculum">
               {courses.map((c, i) => (
                 <div className="course" key={i}>
-                  <div className="code">{c.code}</div>
                   <div className="name">{c.name}</div>
                   <div className="focus">{c.focus}</div>
                 </div>
@@ -1029,11 +848,11 @@ function Academics() {
 
         <FadeUp>
           <div className="research-grid">
-            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>RESEARCH</div>
+            <div />
             <div>
               <span className="section-kicker">— Publications & Co-authorship</span>
               <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 400, marginBottom: 24, maxWidth: "22ch", lineHeight: 1.15 }}>
-                Two papers, <em style={{ fontStyle: "italic", color: "var(--accent)" }}>one ongoing line of inquiry.</em>
+                Two papers, one ongoing line of inquiry.
               </h3>
               {papers.map((p, i) => (
                 <div className="paper" key={i}>
@@ -1061,14 +880,16 @@ function Academics() {
 
         <FadeUp>
           <div className="future">
-            <div className="section-num" style={{ paddingTop: 0, marginTop: 4 }}>FUTURE PATH</div>
+            <div />
             <div>
-              <span className="section-kicker">— Where Next</span>
               <div className="future-headline">
-                Toward an undergraduate program that doesn't ask me to <em>choose between rooms.</em>
+                I want a life where making, performing, and proving aren't kept in separate rooms.
               </div>
               <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: 1.7, maxWidth: "62ch" }}>
-                I'm applying to schools strong in computational and applied mathematics, physics, and economics — with serious humanities programs and active student arts cultures. The goal is to keep the three rooms — research, performance, sport — connected to one corridor.
+                I'm applying to schools strong in computational and applied mathematics, physics, and economics — with serious humanities programs and active student arts cultures. The goal is to keep the three rooms — research, performance, sport — connected to one corridor. Somewhere I can take a math seminar in the morning, draft a paper in the afternoon, and play something on a Friday night without one feeling like a hobby and the other a calling.
+              </p>
+              <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: 1.7, maxWidth: "62ch", marginTop: 16 }}>
+                Longer term: a third book by twenty, a peer-reviewed publication before undergrad ends, and a black belt eventually.
               </p>
               <div className="future-cols">
                 <div className="future-col">
@@ -1103,9 +924,7 @@ function Footer() {
       <div className="wrap">
         <div className="footer-grid">
           <div>
-            <div style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "oklch(0.65 0.01 255)", marginBottom: 24 }}>
-              — Get in touch
-            </div>
+            <div className="section-num" style={{ borderTop: "none", paddingTop: 0, marginTop: 0, marginBottom: 24 }}>06 — Contact</div>
             <h2>For admissions <em>officers, mentors,</em> and curious readers.</h2>
             <p className="footer-lead">
               I'd be happy to share the application packet, references, full publication list, or a longer conversation. The fastest reply is by email.
@@ -1141,13 +960,15 @@ function Footer() {
 function ParallelProgress() {
   const tracks = [
     {
-      discipline: "Tabla", startAge: 3, currentAge: 17, color: "var(--accent)",
+      discipline: "Tabla", startAge: 3, currentAge: 16, color: "var(--accent)",
       milestones: [
-        { age: 3,  label: "First lesson" }, { age: 7,  label: "First taal" },
-        { age: 11, label: "Public recital" }, { age: 15, label: "Visharad I" },
-        { age: 17, label: "All-India finalist" },
+        { age: 3,  label: "First lesson" },
+        { age: 6,  label: "Purna" },
+        { age: 7,  label: "Jr Diploma" },
+        { age: 9,  label: "Sr Diploma" },
+        { age: 16, label: "6th yr exam" },
       ],
-      goal: { label: "Visharad II", age: 20 },
+      goal: { label: "Next level", age: 20 },
     },
     {
       discipline: "Karate", startAge: 5, currentAge: 17, color: "var(--accent)",
@@ -1164,12 +985,22 @@ function ParallelProgress() {
       goal: { label: "Black belt", age: 19 },
     },
     {
-      discipline: "Books", startAge: 10, currentAge: 17, color: "var(--accent)",
+      discipline: "Books", startAge: 11, currentAge: 17, color: "var(--accent)",
       milestones: [
-        { age: 10, label: "First draft" }, { age: 12, label: "Book I" },
-        { age: 15, label: "Book II" }, { age: 17, label: "Book III — writing" },
+        { age: 11, label: "First draft" }, { age: 12, label: "Book I" },
+        { age: 16, label: "Book II" }, { age: 17, label: "Book III — writing" },
       ],
       goal: { label: "Book III out", age: 20 },
+    },
+    {
+      discipline: "Origami", startAge: 7, currentAge: 17, color: "var(--accent)",
+      milestones: [
+        { age: 7,  label: "First crane" },
+        { age: 13, label: "Tessellations" },
+        { age: 15, label: "5,000-unit peacock" },
+        { age: 16, label: "@geometricfolds" },
+      ],
+      goal: { label: "Continued practice", age: 20 },
     },
     {
       discipline: "Research", startAge: 15, currentAge: 17, color: "#7c6a52",
@@ -1185,7 +1016,7 @@ function ParallelProgress() {
         { age: 14, label: "First conf." }, { age: 15, label: "First award" },
         { age: 16, label: "Captain" }, { age: 17, label: "MUN Director" },
       ],
-      goal: { label: "National finalist", age: 18 },
+      goal: { label: "Continue", age: 18 },
     },
   ];
 
@@ -1197,7 +1028,7 @@ function ParallelProgress() {
       <div className="wrap">
         <FadeUp>
           <div className="section-head">
-            <div className="section-num">03.5 — The Compound</div>
+            <div className="section-num">01 — The Compound</div>
             <div>
               <span className="section-kicker">All Disciplines · Same Timeline</span>
               <h2 className="section-title">Five practices, <em>one pattern.</em></h2>
@@ -1492,10 +1323,10 @@ function App() {
     <>
       <Nav />
       <Hero />
+      <ParallelProgress />
       <About />
       <Books />
       <Creativity />
-      <ParallelProgress />
       <Academics />
       <Footer />
 

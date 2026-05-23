@@ -159,7 +159,7 @@ p {
   padding: 0 var(--gutter);
 }
 
-section { padding: clamp(80px, 10vw, 140px) 0; position: relative; }
+section { padding: clamp(56px, 7vw, 100px) 0; position: relative; }
 section + section { border-top: 1px solid var(--hairline); }
 
 .section-head {
