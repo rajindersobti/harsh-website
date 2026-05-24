@@ -1218,14 +1218,28 @@ function CVModal({ open, onClose }) {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
     if (!validate()) return;
+
+    const formspreeId = import.meta.env.VITE_FORMSPREE_ID;
     try {
-      const log = JSON.parse(localStorage.getItem("cvRequests") || "[]");
-      log.push({ ...form, at: new Date().toISOString() });
-      localStorage.setItem("cvRequests", JSON.stringify(log));
-    } catch (_) {}
+      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          _subject: "URGENT REQUEST for HARSH CV",
+          name: form.name,
+          institution: form.institution,
+          email: form.email,
+          phone: form.phone,
+          reason: form.reason,
+        }),
+      });
+      if (!res.ok) throw new Error("Submission failed");
+    } catch (_) {
+      // Fail silently — still show success to user so they aren't blocked
+    }
     setSubmitted(true);
   };
 
