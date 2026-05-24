@@ -4,6 +4,8 @@ import './styles.css';
 
 /* ---------- helpers ---------- */
 const FadeUp = ({ children, delay = 0, as: Tag = "div", ...rest }) => {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) return <Tag {...rest}>{children}</Tag>;
   const Component = motion[Tag] || motion.div;
   return (
     <Component
@@ -36,21 +38,33 @@ function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    // Scroll progress + scrolled state
     const onScroll = () => {
       setScrolled(window.scrollY > 24);
       const total = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(total > 0 ? window.scrollY / total : 0);
-
-      let cur = "home";
-      for (const item of NAV) {
-        const el = document.getElementById(item.id);
-        if (el && el.getBoundingClientRect().top < 140) cur = item.id;
-      }
-      setActive(cur);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Active section via IntersectionObserver
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+    NAV.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
 
   // Close mobile menu on hash change (link tap)
@@ -421,7 +435,7 @@ function Books() {
           <div className="book">
             <div className="book-meta-num">№ 01 / 02</div>
             <div className="book-cover book-cover-photo">
-              <img src="images/book-cover-1.jpg" alt="Land of Horrors — Jack and His Adventures in Cowland Book One" />
+              <img src="images/book-cover-1.jpg" alt="Land of Horrors — Jack and His Adventures in Cowland Book One" width="313" height="500" loading="lazy" decoding="async" />
             </div>
             <div className="book-info">
               <h3>Land of Horrors</h3>
@@ -444,7 +458,7 @@ function Books() {
           <div className="book">
             <div className="book-meta-num">№ 02 / 02</div>
             <div className="book-cover book-cover-photo">
-              <img src="images/book-cover-2.jpg" alt="Jack and His Adventures in Cowland — Book Two" />
+              <img src="images/book-cover-2.jpg" alt="Jack and His Adventures in Cowland — Book Two" width="313" height="500" loading="lazy" decoding="async" />
             </div>
             <div className="book-info">
               <h3>Jack and His Adventures in Cowland</h3>
@@ -648,6 +662,9 @@ function OrigamiCarousel({ tile }) {
                 src={src}
                 alt={`${tile.label} — ${i + 1}`}
                 loading="lazy"
+                decoding="async"
+                width="1280"
+                height="1280"
                 style={tile.fit === "contain" ? { objectFit: "contain", padding: "12px" } : undefined}
               />
             </div>
@@ -1139,20 +1156,43 @@ function CVModal({ open, onClose }) {
   const [form, setForm] = useState({ name: "", institution: "", email: "", phone: "", reason: "" });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const cardRef = useRef(null);
+  const triggerRef = useRef(null);
 
   useEffect(() => {
     if (open) {
       setSubmitted(false);
       setErrors({});
       document.body.style.overflow = "hidden";
+      // Save the element that opened the modal
+      triggerRef.current = document.activeElement;
+      // Focus the modal card after render
+      setTimeout(() => cardRef.current?.focus(), 0);
     } else {
       document.body.style.overflow = "";
+      // Restore focus to the trigger element
+      triggerRef.current?.focus();
     }
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape" && open) onClose(); };
+    const onKey = (e) => {
+      if (e.key === "Escape" && open) { onClose(); return; }
+      // Focus trap: keep Tab inside the modal
+      if (e.key === "Tab" && open && cardRef.current) {
+        const focusable = cardRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
@@ -1207,7 +1247,7 @@ function CVModal({ open, onClose }) {
 
   return (
     <div className="cv-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="cv-card" role="dialog" aria-modal="true" aria-labelledby="cv-title">
+      <div className="cv-card" role="dialog" aria-modal="true" aria-labelledby="cv-title" ref={cardRef} tabIndex={-1}>
         <button className="cv-close" onClick={onClose} aria-label="Close">×</button>
 
         {!submitted ? (
@@ -1279,14 +1319,17 @@ function App() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Nav />
-      <Hero />
-      <ParallelProgress />
-      <About />
-      <Books />
-      <Creativity />
-      <Academics />
-      <Footer />
+      <main id="main-content">
+        <Hero />
+        <ParallelProgress />
+        <About />
+        <Books />
+        <Creativity />
+        <Academics />
+        <Footer />
+      </main>
       <CVModal open={cvOpen} onClose={() => setCvOpen(false)} />
     </>
   );

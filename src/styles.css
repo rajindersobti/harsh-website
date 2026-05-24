@@ -2009,6 +2009,35 @@ section + section { border-top: 1px solid var(--hairline); }
 .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .fade-up.in { opacity: 1; transform: translateY(0); }
 
+/* ---- SKIP LINK ---- */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  border-radius: 4px;
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 16px; }
+
+/* ---- REDUCED MOTION ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .fade-up { opacity: 1; transform: none; }
+  .mobile-nav-link { opacity: 1; transform: none; }
+  .scroll-progress { transition: none; }
+}
+
 /* ---- RESPONSIVE ---- */
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; }
