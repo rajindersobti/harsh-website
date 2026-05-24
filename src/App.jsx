@@ -33,6 +33,7 @@ function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("home");
   const [progress, setProgress] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -52,20 +53,56 @@ function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close mobile menu on hash change (link tap)
+  useEffect(() => {
+    const onHash = () => setMobileOpen(false);
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+
   return (
-    <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
-      <div className="nav-inner">
-        <a href="#home" className="nav-mark">
-          Harsh Sobti<span className="dot"></span>
-        </a>
-        <div className="nav-links">
-          {NAV.map((n) => (
-            <a key={n.id} href={`#${n.id}`} className={`nav-link ${active === n.id ? "active" : ""}`}>{n.label}</a>
-          ))}
+    <>
+      <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
+        <div className="nav-inner">
+          <a href="#home" className="nav-mark">
+            Harsh Sobti<span className="dot"></span>
+          </a>
+          <div className="nav-links">
+            {NAV.map((n) => (
+              <a key={n.id} href={`#${n.id}`} className={`nav-link ${active === n.id ? "active" : ""}`}>{n.label}</a>
+            ))}
+          </div>
+          <button
+            className={`nav-hamburger ${mobileOpen ? "open" : ""}`}
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            <span /><span /><span />
+          </button>
         </div>
+        <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }}></div>
+      </nav>
+
+      {/* Mobile full-screen menu */}
+      <div className={`mobile-menu ${mobileOpen ? "open" : ""}`} aria-hidden={!mobileOpen}>
+        <nav className="mobile-nav">
+          {NAV.map((n, i) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              className={`mobile-nav-link ${active === n.id ? "active" : ""}`}
+              style={{ transitionDelay: mobileOpen ? `${i * 50}ms` : "0ms" }}
+              onClick={() => setMobileOpen(false)}
+            >
+              <span className="mobile-nav-num">0{i + 1}</span>
+              {n.label}
+            </a>
+          ))}
+        </nav>
       </div>
-      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }}></div>
-    </nav>
+    </>
   );
 }
 
@@ -723,13 +760,6 @@ function Tabla() {
         </div>
       </div>
 
-      <div className="media-frame placeholder">
-        <div className="play">
-          <div className="play-disc"></div>
-          <div className="ph-meta">video · teentaal solo · 03:42 — replace_me.mp4</div>
-        </div>
-        <div className="scrub"></div>
-      </div>
     </FadeUp>
   );
 }
@@ -930,7 +960,7 @@ function Footer() {
             <h5>Direct</h5>
             <ul>
               <li><a href="mailto:harshsobti2009@gmail.com">harshsobti2009@gmail.com</a></li>
-              <li><a href="#">+91 · on request</a></li>
+              <li><span>+91 · on request</span></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent("openCVModal")); }}>Download CV (PDF)</a></li>
             </ul>
           </div>
