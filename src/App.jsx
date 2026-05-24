@@ -978,7 +978,7 @@ function Footer() {
             <ul>
               <li><a href="mailto:harshsobti2009@gmail.com">harshsobti2009@gmail.com</a></li>
               <li><span>+91 · on request</span></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent("openCVModal")); }}>Download CV (PDF)</a></li>
+              <li><span style={{ color: "var(--ink-soft)", cursor: "default" }}>Download CV — coming soon</span></li>
             </ul>
           </div>
           <div className="footer-col">
