@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0F1F2E"/>
+  <!-- subtle grid lines -->
+  <line x1="0" y1="210" x2="1200" y2="210" stroke="#2D5266" stroke-width="1"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="#2D5266" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="630" stroke="#2D5266" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="630" stroke="#2D5266" stroke-width="1"/>
+  <!-- accent dot -->
+  <circle cx="120" cy="120" r="8" fill="#5EBEC4"/>
+  <!-- monogram -->
+  <text x="120" y="340" font-family="Georgia, serif" font-size="180" font-style="italic" fill="#D4E4E8" opacity="0.08">HS</text>
+  <!-- name -->
+  <text x="120" y="310" font-family="Georgia, serif" font-size="72" font-style="italic" fill="#D4E4E8">Harsh Sobti</text>
+  <!-- tagline -->
+  <text x="120" y="370" font-family="ui-monospace, monospace" font-size="18" letter-spacing="4" fill="#5EBEC4">AUTHOR · MUSICIAN · ATHLETE</text>
+  <!-- descriptor -->
+  <text x="120" y="430" font-family="Georgia, serif" font-size="24" fill="#8DA5AD">A student of curiosity, rhythm, and paper.</text>
+  <!-- bottom label -->
+  <text x="120" y="560" font-family="ui-monospace, monospace" font-size="14" letter-spacing="3" fill="#6A8B96">harshsobti.com</text>
+</svg>
